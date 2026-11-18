@@ -1,1 +1,121 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jack | System Initialization</title>
+    <style>
+        /* Base Reset */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        :root { --tree-color: #0d1a00; --ground-color: #1a3300; --hill-color: #142900; --road-color: #2a2a2a; --animal-color: #050a00; }
+        body, html { width: 100%; height: 100vh; overflow: hidden; background-color: #000; }
+
+        /* Environment Container */
+        #environment {
+            position: relative; width: 100vw; height: 100vh; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; z-index: 1; overflow: hidden;
+            background-size: cover; background-repeat: no-repeat; animation: envFadeIn 1.5s ease-in-out forwards;
+        }
+        @keyframes envFadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        #greeting-text {
+            font-size: clamp(1.8rem, 5vw, 3.8rem); color: #ffffff; text-align: center; 
+            text-shadow: 0 4px 15px rgba(0, 0, 0, 0.8); z-index: 30; opacity: 0; 
+            animation: fadeInText 3s ease-in-out forwards; animation-delay: 0.8s; margin-bottom: 20vh;
+        }
+        @keyframes fadeInText { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
+
+        /* Celestial Bodies & Stars */
+        .celestial-body { position: absolute; border-radius: 50%; z-index: 2; left: 50%; transform: translateX(-50%); }
+        .sun { width: 110px; height: 110px; background: radial-gradient(circle, #ffd700, #ff8c00); box-shadow: 0 0 50px #ff8c00; }
+        .moon { width: 90px; height: 90px; background: radial-gradient(circle, #f4f6f0, #c8c8c8); box-shadow: 0 0 30px #ffffff, inset -12px -12px 0 rgba(0,0,0,0.2); }
+        
+        #stars-container { position: absolute; top: 0; left: 0; width: 100%; height: 65%; z-index: 1; opacity: 0; transition: opacity 2s ease-in-out; }
+        .star { position: absolute; background: white; border-radius: 50%; box-shadow: 0 0 4px white; animation: twinkle 3s infinite alternate; }
+        @keyframes twinkle { 0% { opacity: 0.3; transform: scale(0.8); } 100% { opacity: 1; transform: scale(1.2); } }
+
+        /* Landscape & Assets (Condensed for structure) */
+        .landscape { position: absolute; bottom: 0; left: 0; width: 100%; height: 260px; z-index: 10; }
+        .hill { position: absolute; bottom: 110px; background: var(--hill-color); border-radius: 50% 50% 0 0; z-index: 9; }
+        .hill-1 { width: 60vw; height: 90px; left: -10vw; } .hill-2 { width: 70vw; height: 115px; right: -15vw; }
+        .ground { position: absolute; bottom: 65px; left: 0; width: 100%; height: 55px; background: var(--ground-color); border-top: 2px solid #264d00; z-index: 11; }
+        
+        /* Trains */
+        .track { position: absolute; left: 0; width: 100%; height: 6px; background: rgba(17,17,17,0.8); }
+        .track-1 { bottom: 102px; z-index: 13; } .track-2 { bottom: 74px; z-index: 15; }
+        .train { position: absolute; width: 480px; height: 32px; display: flex; gap: 4px; }
+        .train-carriage { width: 75px; height: 100%; background: #1e3a8a; display: flex; justify-content: center; align-items: center; color: #fff; font-size: 10px; }
+        .train-ltr { bottom: 105px; left: -100vw; z-index: 14; animation: driveLTR 18s linear infinite; }
+        @keyframes driveLTR { 0% { transform: translateX(0); } 100% { transform: translateX(200vw); } }
+
+        /* Theme States */
+        .theme-morning { --ground-color: #336600; background: linear-gradient(to top, #ff9a44, #fc6076); }
+        .theme-morning .sun { animation: rise 4s ease-out forwards; }
+        .theme-night { --ground-color: #0a1400; background: linear-gradient(to top, #0f2027, #203a43, #2c5364); }
+        .theme-night .moon { top: 15vh; }
+        .theme-night #stars-container { opacity: 1; }
+        @keyframes rise { 0% { top: 100vh; opacity: 0; } 100% { top: 15vh; opacity: 1; } }
+    </style>
+</head>
+<body>
+    <div id="environment">
+        <div id="stars-container"></div>
+        <div id="celestial" class="celestial-body"></div>
+        <h1 id="greeting-text"></h1>
+        
+        <div class="landscape">
+            <div class="hill hill-1"></div><div class="hill hill-2"></div>
+            <div class="ground"></div>
+            <div class="track track-1"></div>
+            <div class="train train-ltr">
+                <div class="train-carriage">HTML</div>
+                <div class="train-carriage">CSS</div>
+                <div class="train-carriage">JS</div>
+                <div class="train-carriage">REACT</div>
+                <div class="train-carriage">PYTHON</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const environment = document.getElementById("environment");
+            const greetingText = document.getElementById("greeting-text");
+            const celestial = document.getElementById("celestial");
+            const starsContainer = document.getElementById("stars-container");
+
+            for (let i = 0; i < 30; i++) {
+                let star = document.createElement("div");
+                star.classList.add("star");
+                star.style.width = Math.random() * 2 + 1 + "px";
+                star.style.height = star.style.width;
+                star.style.top = Math.random() * 100 + "%";
+                star.style.left = Math.random() * 100 + "%";
+                star.style.animationDelay = Math.random() * 2 + "s";
+                starsContainer.appendChild(star);
+            }
+
+            const hours = new Date().getHours();
+            let greeting = ""; let themeClass = ""; let celestialType = "";
+
+            if (hours >= 5 && hours < 12) {
+                greeting = "Good morning"; themeClass = "theme-morning"; celestialType = "sun";
+            } else if (hours >= 12 && hours < 18) {
+                greeting = "Good afternoon"; themeClass = "theme-morning"; celestialType = "sun";
+            } else {
+                greeting = "Good evening"; themeClass = "theme-night"; celestialType = "moon";
+            }
+
+            environment.classList.add(themeClass);
+            celestial.classList.add(celestialType);
+            greetingText.innerHTML = `${greeting}<br>SIR/MA'AM`;
+            
+            // Redirect to the main public portfolio after 10 seconds
+            setTimeout(() => {
+                window.location.href = "portfolio.html";
+            }, 10000);
+        });
+    </script>
+</body>
+</html>
