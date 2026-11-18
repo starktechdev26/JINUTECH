@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /JINUTECH/master.html
+Disallow: /JINUTECH/dashboard.html
+
+Sitemap: https://starktechdev26.github.io/JINUTECH/sitemap.xml
