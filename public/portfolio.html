@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jack | STARK DEV PORTFOLIO</title>
+    <link rel="stylesheet" href="public-style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- Animated Cyber Grid Background -->
+    <div class="grid-background"></div>
+    <div class="grid-fade"></div>
+    <div id="lightning-flash"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <a href="#home" class="logo">J<span>.</span></a>
+        <ul class="navlinks" id="navlinks">
+            <li><a href="#home" class="nlink">Core</a></li>
+            <li><a href="#protocol" class="nlink">Agents</a></li>
+            <li><a href="#projects" class="nlink">Builds</a></li>
+            <li><a href="#contact" class="nlink">Uplink</a></li>
+        </ul>
+    </nav>
+
+    <!-- Core Hub (Hero with 3D Phone) -->
+    <section id="home" class="landing-container reveal">
+        
+        <!-- Left: Text Info -->
+        <div class="text-content">
+            <p class="hero-pre"><span class="hpre-line"></span> &nbsp;ORCHESTRATOR FRAMEWORK ACTIVE&nbsp; <span class="hpre-line"></span></p>
+            <h1 class="name">Hi, I'm Jack.</h1>
+            
+            <div class="typing-container">
+                <span class="typing-text" id="typewriter"></span><span class="tcursor">|</span>
+            </div>
+
+            <p class="bio">
+                A final-year BCA student and passionate developer currently crafting web architectures and advanced mobile security solutions. Let's build something secure and beautiful.
+            </p>
+
+            <div class="hero-btns">
+                <a href="#protocol" class="btn btn-primary" id="assemble-btn">
+                    <i class="fas fa-bolt"></i> &nbsp; Assemble Agents
+                </a>
+                <a href="#contact" class="btn btn-outline">
+                    Secure Link &nbsp;<i class="fas fa-paper-plane"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Right: 3D Phone Visual Content -->
+        <div class="visual-content">
+            <div class="phone-3d">
+                <div class="phone-notch"></div>
+                <div class="phone-screen">
+                    <div class="app-icon">
+                        <div class="shield"></div>
+                    </div>
+                    <div class="app-text">Raksha-Suraksha</div>
+                    <div class="app-subtext">System Active</div>
+                </div>
+                <!-- 3D Pop-out Badges -->
+                <div class="float-badge badge-1">Mobile Security</div>
+                <div class="float-badge badge-2">Full-Stack Hub</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Agent Protocol Network -->
+    <section id="protocol" class="section alt">
+        <div class="sec-head reveal">
+            <p class="sec-pre">// SUBSYSTEM ORCHESTRATION</p>
+            <h2 class="sec-title">Agent <span>Network Cluster</span></h2>
+            <div class="sec-line"></div>
+        </div>
+
+        <div class="protocol-banner reveal">
+            <div class="status-indicator-node sync-pulse"></div>
+            <div class="banner-text" id="protocol-status-text">SYSTEM STANDBY // ALL AGENTS IDLE</div>
+        </div>
+
+        <div class="agents-matrix">
+            <div class="agent-node flash-card reveal color-jarvis" data-agent="JARVIS" data-log="JARVIS Online. Prime Orchestrator Active.">
+                <div class="agent-header">
+                    <span class="agent-title">JARVIS</span>
+                    <span class="agent-stat">100/100</span>
+                </div>
+                <div class="agent-core-display">
+                    <div class="agent-ring"></div>
+                    <div class="agent-pulse-waves"><span></span><span></span><span></span></div>
+                </div>
+                <div class="agent-footer">
+                    <span class="agent-tag">CORE NET</span>
+                    <span class="agent-mode">SYS ACTIVE</span>
+                </div>
+            </div>
+
+            <div class="agent-node flash-card reveal delay-1 color-friday" data-agent="FRIDAY" data-log="FRIDAY Active. Master Node Portal online.">
+                <div class="agent-header">
+                    <span class="agent-title">FRIDAY</span>
+                    <span class="agent-stat">90/100</span>
+                </div>
+                <div class="agent-core-display">
+                    <div class="agent-ring"></div>
+                    <div class="agent-pulse-waves"><span></span><span></span><span></span></div>
+                </div>
+                <div class="agent-footer">
+                    <span class="agent-tag">MASTER NODE</span>
+                    <span class="agent-mode">PORTAL ACTIVE</span>
+                </div>
+            </div>
+
+            <!-- BACKDOOR TRIGGER: Tapping STEVE 3 times triggers the secret login -->
+            <div class="agent-node flash-card reveal delay-2 color-steve" data-agent="STEVE" id="steve-node" data-log="STEVE Subsystem Live. Raksha-Suraksha UI initialized.">
+                <div class="agent-header">
+                    <span class="agent-title">STEVE</span>
+                    <span class="agent-stat">72/100</span>
+                </div>
+                <div class="agent-core-display">
+                    <div class="agent-ring"></div>
+                    <div class="agent-pulse-waves"><span></span><span></span><span></span></div>
+                </div>
+                <div class="agent-footer">
+                    <span class="agent-tag">RAKSHA-SURAKSHA</span>
+                    <span class="agent-mode">PORTAL ACTIVE</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Terminal Console -->
+        <div class="matrix-terminal reveal">
+            <div class="terminal-header">
+                <span class="t-dot red"></span><span class="t-dot yellow"></span><span class="t-dot green"></span>
+                <span class="t-title">AVENGERS_PROTO_LOG//</span>
+            </div>
+            <div class="terminal-body" id="matrix-console">
+                <div class="term-row text-mute">> Initialize global monitoring cluster matrix...</div>
+                <div class="term-row text-mute">> Core variables loaded successfully. Awaiting terminal roll call command.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Floating Voice Command Mic -->
+    <button id="mic-btn" class="mic-btn" aria-label="Voice Command Interface">
+        <i class="fas fa-microphone-slash"></i>
+    </button>
+
+    <script src="public-app.js"></script>
+</body>
+</html>
