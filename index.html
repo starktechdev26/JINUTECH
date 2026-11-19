@@ -3,17 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JINUTECH | Dynamic Cyber-Physical Engine v2.1</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <title>JINUTECH | Dynamic Cyber-Physical Engine v2.3</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <style>
         :root {
             --neon-cyan: #00f3ff;
-            --neon-blue: #0066ff;
-            --neon-amber: #ffaa00;
             --neon-green: #00ffaa;
             --neon-red: #ff0044;
-            --bg-void: #020408;
-            --panel-bg: rgba(4, 10, 20, 0.88);
+            --panel-bg: rgba(4, 11, 24, 0.88);
             --border-glow: rgba(0, 243, 255, 0.35);
             --font-hud: 'Share Tech Mono', monospace;
             --font-title: 'Orbitron', sans-serif;
@@ -31,164 +28,298 @@
             height: 100vh;
             height: 100dvh;
             overflow: hidden;
-            background-color: var(--bg-void);
+            background-color: #02050b;
             font-family: var(--font-hud);
-            color: #d1e4f5;
+            color: #d8ecff;
         }
 
-        #skybox-canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            height: 100dvh;
+        /* --- PROCEDURAL HIGH-FIDELITY ATMOSPHERE --- */
+        .sky-viewport {
+            position: fixed;
+            inset: 0;
             z-index: 1;
+            background: linear-gradient(180deg, #104882 0%, #2f7ec9 45%, #76b5eb 85%, #b4d8f7 100%);
+            transition: background 1.5s ease;
+        }
+
+        body.sky-evening .sky-viewport {
+            background: linear-gradient(180deg, #161033 0%, #4a214d 38%, #a04351 70%, #f08953 100%);
+        }
+
+        body.sky-night .sky-viewport {
+            background: linear-gradient(180deg, #020611 0%, #061426 50%, #0d2745 100%);
+        }
+
+        body.weather-rain .sky-viewport {
+            filter: brightness(0.68) saturate(0.65);
+        }
+
+        /* Celestial Bodies (Solar & Lunar) */
+        .celestial-sun, .celestial-moon {
+            position: fixed;
+            border-radius: 50%;
+            z-index: 2;
+            pointer-events: none;
+            will-change: transform;
+        }
+
+        .celestial-sun {
+            width: 90px;
+            height: 90px;
+            top: 17%;
+            right: 17%;
+            background: radial-gradient(circle, #ffffff 10%, #fff1a8 30%, #ffaa22 75%, rgba(255,160,0,0) 100%);
+            box-shadow: 0 0 45px rgba(255, 175, 40, 0.8), 0 0 95px rgba(255, 150, 0, 0.4);
+            animation: sunPulse 6s ease-in-out infinite alternate;
+        }
+
+        .celestial-moon {
+            width: 76px;
+            height: 76px;
+            top: 16%;
+            left: 17%;
+            background: radial-gradient(circle at 35% 35%, #ffffff 0%, #d8e5f2 50%, #90a8c0 100%);
+            box-shadow: 0 0 35px rgba(215, 235, 255, 0.7), inset -8px -6px 0 rgba(15, 30, 50, 0.35);
+            opacity: 0;
+            animation: sunPulse 7s ease-in-out infinite alternate;
+        }
+
+        body.sky-night .celestial-sun, body.sky-evening .celestial-sun { opacity: 0.2; }
+        body.sky-night .celestial-moon, body.sky-evening .celestial-moon { opacity: 0.95; }
+
+        @keyframes sunPulse {
+            0% { transform: scale(1) translate3d(0, 0, 0); }
+            100% { transform: scale(1.04) translate3d(8px, -6px, 0); }
+        }
+
+        /* --- REALISTIC PROCEDURAL CLOUD SCENE (SVG Fractal Filter) --- */
+        .cloud-stage {
+            position: fixed;
+            inset: 0;
+            z-index: 3;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .cloud-mass {
+            position: absolute;
+            width: 220vw;
+            height: 48vh;
+            top: 6%;
+            left: -30vw;
+            filter: url(#realistic-clouds) blur(1px);
+            opacity: 0.82;
+            will-change: transform;
+            animation: cloudDriftSlow 75s linear infinite;
+        }
+
+        .cloud-mass.layer-foreground {
+            top: 14%;
+            opacity: 0.65;
+            animation: cloudDriftFast 45s linear infinite;
+            filter: url(#realistic-clouds) blur(2px);
+        }
+
+        body.sky-evening .cloud-mass {
+            mix-blend-mode: overlay;
+            opacity: 0.9;
+        }
+
+        body.sky-night .cloud-mass {
+            opacity: 0.35;
+            filter: url(#realistic-clouds) brightness(0.4);
+        }
+
+        body.weather-rain .cloud-mass {
+            opacity: 0.95;
+            filter: url(#realistic-clouds) brightness(0.5);
+        }
+
+        @keyframes cloudDriftSlow {
+            0% { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(-40vw, 0, 0); }
+        }
+
+        @keyframes cloudDriftFast {
+            0% { transform: translate3d(-30vw, 0, 0); }
+            100% { transform: translate3d(15vw, 0, 0); }
+        }
+
+        /* Realistic Rain Streaks */
+        .rain-matrix {
+            position: fixed;
+            inset: 0;
+            z-index: 4;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            background-image: repeating-linear-gradient(
+                105deg,
+                rgba(175, 230, 255, 0.35) 0px,
+                rgba(175, 230, 255, 0.35) 1.5px,
+                transparent 1.5px,
+                transparent 22px
+            );
+            animation: rainPour 0.4s linear infinite;
+        }
+
+        body.weather-rain .rain-matrix { opacity: 1; }
+
+        @keyframes rainPour {
+            0% { transform: translate3d(0, -22px, 0); }
+            100% { transform: translate3d(-8px, 22px, 0); }
+        }
+
+        /* --- DEEP REALISTIC LAYERED MOUNTAINS (4 PARALLAX RIDGES) --- */
+        .mountain-range {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            height: 38vh;
+            z-index: 5;
+            pointer-events: none;
             display: block;
         }
 
-        .crt-overlay {
-            position: fixed;
-            inset: 0;
-            background: repeating-linear-gradient(
-                0deg,
-                rgba(0, 0, 0, 0.08),
-                rgba(0, 0, 0, 0.08) 1px,
-                transparent 1px,
-                transparent 3px
-            );
-            pointer-events: none;
-            z-index: 15;
-        }
-
+        /* --- HUD UI PLATFORM --- */
         .hud-layout {
-            position: absolute;
-            inset: 0;
+            position: relative;
+            width: 100%;
+            height: 100%;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            padding: 16px 20px;
+            padding: 14px 16px;
             z-index: 20;
-            pointer-events: none;
             gap: 10px;
         }
 
-        /* Bigger Header for Clear Date, Month, Year & 12h Time */
         .hud-header {
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
             align-items: center;
-            gap: 14px;
-            padding: 14px 18px;
-            background: rgba(4, 12, 24, 0.78);
+            gap: 12px;
+            padding: 14px 16px;
+            background: rgba(3, 10, 22, 0.85);
             border: 1px solid var(--border-glow);
             border-radius: 10px;
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-            pointer-events: auto;
         }
 
         .brand-node h1 {
             font-family: var(--font-title);
-            font-size: clamp(1.35rem, 4vw, 1.95rem);
-            letter-spacing: 3px;
+            font-size: clamp(1.3rem, 4vw, 1.85rem);
+            letter-spacing: 2.5px;
             color: #ffffff;
-            text-shadow: 0 0 14px var(--neon-cyan);
+            text-shadow: 0 0 14px rgba(0, 243, 255, 0.55);
         }
 
         .brand-node span {
             display: block;
-            color: var(--neon-cyan);
-            font-size: 0.78rem;
-            letter-spacing: 1.5px;
-            margin-top: 3px;
+            color: var(--neon-green);
+            font-size: clamp(0.85rem, 2.3vw, 1rem);
+            letter-spacing: 0.8px;
+            margin-top: 2px;
         }
 
         .telemetry-cluster {
             display: flex;
             flex-wrap: wrap;
-            gap: 18px;
-            text-align: right;
-            font-size: 0.8rem;
-            color: var(--neon-cyan);
+            gap: 10px;
+            flex: 1;
+            justify-content: flex-end;
         }
 
         .telemetry-item {
-            background: rgba(0, 243, 255, 0.05);
-            border: 1px solid rgba(0, 243, 255, 0.2);
+            background: rgba(0, 243, 255, 0.06);
+            border: 1px solid rgba(0, 243, 255, 0.24);
             padding: 8px 12px;
-            border-radius: 6px;
+            border-radius: 7px;
+            min-width: 130px;
+        }
+
+        .telemetry-item span {
+            display: block;
+            font-size: 0.68rem;
+            color: var(--neon-cyan);
+            letter-spacing: 1px;
         }
 
         .telemetry-item b {
             display: block;
-            color: #fff;
-            font-size: clamp(0.95rem, 2.5vw, 1.15rem);
+            color: #ffffff;
+            font-size: clamp(0.9rem, 2.4vw, 1.08rem);
             font-family: var(--font-title);
             margin-top: 2px;
         }
 
-        /* Center Greeting + Animated 🅕Ⓞ🅝Ⓣ Badge */
+        /* Center Greeting + Sweep Animation Bar */
         .center-announcer {
             text-align: center;
+            padding: 4px 10px;
             pointer-events: none;
-            padding: 6px 12px;
         }
 
         .greeting-sub {
-            font-size: 0.78rem;
-            letter-spacing: 3px;
+            font-size: 0.75rem;
+            letter-spacing: 2.5px;
             color: var(--neon-cyan);
             margin-bottom: 6px;
             text-transform: uppercase;
+            text-shadow: 0 1px 6px rgba(0, 0, 0, 0.8);
         }
 
         .greeting-main {
             font-family: var(--font-title);
-            font-size: clamp(1.6rem, 5vw, 3.3rem);
+            font-size: clamp(1.6rem, 5.2vw, 3.2rem);
             font-weight: 900;
             color: #ffffff;
-            text-shadow: 0 0 22px rgba(0, 243, 255, 0.75);
-            letter-spacing: 2px;
+            text-shadow: 0 2px 18px rgba(0, 0, 0, 0.85), 0 0 20px rgba(0, 243, 255, 0.65);
+            letter-spacing: 1.5px;
             line-height: 1.15;
         }
 
-        .font-badge {
-            display: inline-block;
-            margin-top: 8px;
-            padding: 4px 14px;
-            font-size: clamp(0.95rem, 2.6vw, 1.25rem);
-            letter-spacing: 4px;
-            color: var(--neon-green);
-            background: rgba(0, 255, 170, 0.08);
-            border: 1px solid rgba(0, 255, 170, 0.45);
+        .vis-anim-wrap {
+            width: min(240px, 65vw);
+            height: 10px;
+            margin: 12px auto 0;
             border-radius: 999px;
-            animation: badgeFloatGlow 2.4s ease-in-out infinite alternate;
+            background: rgba(2, 10, 20, 0.75);
+            border: 1px solid rgba(0, 243, 255, 0.45);
+            overflow: hidden;
+            position: relative;
         }
 
-        @keyframes badgeFloatGlow {
-            0% {
-                transform: translateY(0px) scale(1);
-                box-shadow: 0 0 8px rgba(0, 255, 170, 0.25);
-            }
-            100% {
-                transform: translateY(-4px) scale(1.04);
-                box-shadow: 0 0 18px rgba(0, 243, 255, 0.65);
-            }
+        .vis-anim-sweep {
+            position: absolute;
+            top: 0;
+            left: -35%;
+            width: 35%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, var(--neon-cyan), var(--neon-green), transparent);
+            animation: sweepBar 2.1s ease-in-out infinite;
+            will-change: transform;
+        }
+
+        @keyframes sweepBar {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(385%); }
         }
 
         /* Command Deck */
         .command-deck {
-            width: min(95vw, 920px);
+            width: min(96vw, 900px);
             margin: 0 auto;
             background: var(--panel-bg);
             border: 1px solid var(--border-glow);
             border-radius: 10px;
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            box-shadow: 0 0 35px rgba(0, 243, 255, 0.18);
-            pointer-events: auto;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
         }
 
         .deck-bar {
@@ -200,37 +331,29 @@
             padding: 8px 14px;
             background: rgba(0, 243, 255, 0.08);
             border-bottom: 1px solid var(--border-glow);
-            font-size: 0.72rem;
-            letter-spacing: 0.8px;
+            font-size: 0.7rem;
             color: var(--neon-cyan);
         }
 
         .deck-status {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 7px;
         }
 
         .status-dot {
             width: 8px;
             height: 8px;
-            flex-shrink: 0;
-            background: var(--neon-green);
             border-radius: 50%;
+            background: var(--neon-green);
             box-shadow: 0 0 8px var(--neon-green);
-            animation: pulseDot 2s infinite ease-in-out;
-        }
-
-        @keyframes pulseDot {
-            0%, 100% { opacity: 0.35; }
-            50% { opacity: 1; }
         }
 
         .deck-body {
-            padding: 14px 16px;
+            padding: 12px 14px;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
         }
 
         .mode-switch-row {
@@ -240,41 +363,37 @@
         }
 
         .mode-tab {
-            background: rgba(0, 14, 28, 0.75);
+            background: rgba(0, 14, 28, 0.8);
             border: 1px solid rgba(0, 243, 255, 0.28);
-            color: #9ec5e8;
-            padding: 9px 10px;
+            color: #a6c9ea;
+            padding: 9px 8px;
             font-family: var(--font-hud);
-            font-size: 0.78rem;
-            letter-spacing: 1px;
+            font-size: 0.75rem;
+            letter-spacing: 0.8px;
             cursor: pointer;
             border-radius: 5px;
-            transition: all 0.2s ease;
-            text-align: center;
+            transition: background 0.2s, color 0.2s;
         }
 
         .mode-tab.active, .mode-tab:hover {
-            border-color: var(--neon-cyan);
-            color: #000;
             background: var(--neon-cyan);
-            box-shadow: 0 0 12px rgba(0, 243, 255, 0.45);
+            color: #000;
+            border-color: var(--neon-cyan);
         }
 
         .mode-panel {
-            background: rgba(0, 6, 14, 0.72);
+            display: none;
+            background: rgba(0, 8, 18, 0.75);
             border: 1px solid rgba(0, 243, 255, 0.18);
             border-radius: 6px;
-            padding: 12px;
-            display: none;
+            padding: 10px 12px;
         }
 
-        .mode-panel.active {
-            display: block;
-        }
+        .mode-panel.active { display: block; }
 
         .store-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 8px;
             margin-top: 8px;
         }
@@ -283,46 +402,30 @@
             background: rgba(0, 243, 255, 0.08);
             border: 1px solid rgba(0, 243, 255, 0.32);
             color: #fff;
-            padding: 9px 10px;
+            padding: 8px 10px;
             border-radius: 5px;
             font-family: var(--font-hud);
-            font-size: 0.75rem;
+            font-size: 0.74rem;
             cursor: pointer;
             text-align: left;
-            transition: all 0.2s ease;
         }
 
         .store-item-btn small {
             display: block;
             color: var(--neon-cyan);
-            font-size: 0.65rem;
+            font-size: 0.64rem;
             margin-top: 2px;
-        }
-
-        .store-item-btn:hover {
-            border-color: var(--neon-green);
-            background: rgba(0, 255, 170, 0.12);
-        }
-
-        .deck-feed {
-            max-height: 54px;
-            font-size: 0.74rem;
-            line-height: 1.45;
-            color: #9ec5e8;
-            overflow-y: auto;
         }
 
         .deck-btn {
             background: rgba(0, 243, 255, 0.14);
             border: 1px solid var(--neon-cyan);
             color: var(--neon-cyan);
-            padding: 9px 14px;
+            padding: 8px 14px;
             font-family: var(--font-hud);
-            font-size: 0.78rem;
-            letter-spacing: 1px;
+            font-size: 0.76rem;
             cursor: pointer;
             border-radius: 4px;
-            transition: all 0.25s ease;
             margin-top: 8px;
         }
 
@@ -331,12 +434,19 @@
             color: #000;
         }
 
-        /* Auth Modal */
+        .deck-feed {
+            max-height: 44px;
+            font-size: 0.72rem;
+            line-height: 1.4;
+            color: #9ec5e8;
+            overflow-y: auto;
+        }
+
+        /* Auth Gate Modal */
         #auth-modal {
             position: fixed;
             inset: 0;
-            background: rgba(0, 5, 12, 0.9);
-            backdrop-filter: blur(8px);
+            background: rgba(0, 5, 12, 0.88);
             display: none;
             justify-content: center;
             align-items: center;
@@ -345,12 +455,11 @@
         }
 
         .auth-card {
-            width: min(92vw, 380px);
+            width: min(92vw, 370px);
             background: var(--panel-bg);
             border: 1px solid var(--neon-cyan);
             border-radius: 8px;
-            padding: 22px;
-            box-shadow: 0 0 30px rgba(0, 243, 255, 0.35);
+            padding: 20px;
             text-align: center;
         }
 
@@ -358,25 +467,86 @@
             width: 100%;
             background: rgba(0, 0, 0, 0.65);
             border: 1px solid var(--border-glow);
-            padding: 11px;
+            padding: 10px;
             text-align: center;
             font-family: var(--font-hud);
-            font-size: 1.05rem;
+            font-size: 1rem;
             color: var(--neon-cyan);
-            margin: 14px 0;
+            margin: 12px 0;
             letter-spacing: 3px;
             outline: none;
             border-radius: 4px;
         }
     </style>
 </head>
-<body>
+<body class="sky-day weather-cloudy">
 
-    <div class="crt-overlay"></div>
-    <canvas id="skybox-canvas"></canvas>
+    <!-- Atmospheric Sky Layer -->
+    <div class="sky-viewport" id="sky-viewport"></div>
+    <div class="celestial-sun"></div>
+    <div class="celestial-moon"></div>
 
+    <!-- GPU-Accelerated Fractal Cloud Stage -->
+    <div class="cloud-stage">
+        <!-- SVG Filter Definition: Pre-baked turbulence rendered directly by GPU compositor -->
+        <svg style="position: absolute; width: 0; height: 0;">
+            <filter id="realistic-clouds" x="0%" y="0%" width="100%" height="100%">
+                <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="4" seed="42" result="noise" />
+                <feDisplacementMap in="SourceGraphic" in2="noise" scale="65" xChannelSelector="R" yChannelSelector="G" />
+            </filter>
+        </svg>
+
+        <!-- Dynamic Cloud Masses with soft radial gradients deformed by the fractal filter -->
+        <svg class="cloud-mass" viewBox="0 0 1200 400" preserveAspectRatio="none">
+            <defs>
+                <radialGradient id="cloudGrad1" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95"/>
+                    <stop offset="55%" stop-color="#eaf3fc" stop-opacity="0.8"/>
+                    <stop offset="100%" stop-color="#cfdfee" stop-opacity="0"/>
+                </radialGradient>
+            </defs>
+            <ellipse cx="250" cy="180" rx="240" ry="110" fill="url(#cloudGrad1)"/>
+            <ellipse cx="600" cy="160" rx="320" ry="140" fill="url(#cloudGrad1)"/>
+            <ellipse cx="980" cy="190" rx="260" ry="120" fill="url(#cloudGrad1)"/>
+        </svg>
+
+        <svg class="cloud-mass layer-foreground" viewBox="0 0 1200 400" preserveAspectRatio="none">
+            <defs>
+                <radialGradient id="cloudGrad2" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#ffffff" stop-opacity="0.75"/>
+                    <stop offset="65%" stop-color="#dfeefa" stop-opacity="0.55"/>
+                    <stop offset="100%" stop-color="#bed6ec" stop-opacity="0"/>
+                </radialGradient>
+            </defs>
+            <ellipse cx="380" cy="220" rx="310" ry="120" fill="url(#cloudGrad2)"/>
+            <ellipse cx="820" cy="200" rx="340" ry="130" fill="url(#cloudGrad2)"/>
+        </svg>
+    </div>
+
+    <!-- Rain Matrix -->
+    <div class="rain-matrix"></div>
+
+    <!-- 4-Layer High-Fidelity Ridge Mountains -->
+    <svg class="mountain-range" viewBox="0 0 1440 380" preserveAspectRatio="none">
+        <!-- Far Distance Silhouette -->
+        <path d="M0,230 Q180,140 360,200 T720,160 T1080,210 T1440,170 L1440,380 L0,380 Z" 
+              fill="#183a48" opacity="0.45" />
+        
+        <!-- Mid-Distance Ridge with Jagged Terrain Peaks -->
+        <path d="M0,260 Q120,180 240,240 T480,190 T720,250 T960,180 T1200,230 T1440,200 L1440,380 L0,380 Z" 
+              fill="#102f35" opacity="0.75" />
+        
+        <!-- Fore-Middle Dramatic Hills -->
+        <path d="M0,290 C180,220 320,310 520,240 C720,180 920,290 1140,230 C1280,190 1380,260 1440,240 L1440,380 L0,380 Z" 
+              fill="#0b2424" opacity="0.9" />
+        
+        <!-- Crisp Foreground Mountain Base with Ambient Shadow -->
+        <path d="M0,320 C240,260 480,340 720,280 C960,230 1200,320 1440,270 L1440,380 L0,380 Z" 
+              fill="#051614" />
+    </svg>
+
+    <!-- Main Live HUD Display -->
     <div class="hud-layout">
-        <!-- Larger Header: Date, Month Name, Year + 12h Time + Loc/Direction/Weather -->
         <header class="hud-header">
             <div class="brand-node">
                 <h1>JINUTECH</h1>
@@ -386,7 +556,7 @@
             <div class="telemetry-cluster">
                 <div class="telemetry-item">
                     <span>12H TIME</span>
-                    <b id="time-12h-display">11:12:00 AM</b>
+                    <b id="time-12h-display">11:37:00 AM</b>
                 </div>
                 <div class="telemetry-item">
                     <span>LOC &amp; DIR</span>
@@ -399,19 +569,19 @@
             </div>
         </header>
 
-        <!-- Greeting: Visitor + Animated 🅕Ⓞ🅝Ⓣ Badge -->
         <div class="center-announcer">
-            <div class="greeting-sub" id="greeting-sub">// VISITOR TELEMETRY SYNC</div>
+            <div class="greeting-sub">// VISITOR TELEMETRY SYNC</div>
             <h2 class="greeting-main" id="greeting-main">GOOD MORNING, VISITOR</h2>
-            <div class="font-badge">🅕Ⓞ🅝Ⓣ</div>
+            <div class="vis-anim-wrap" aria-hidden="true">
+                <div class="vis-anim-sweep"></div>
+            </div>
         </div>
 
-        <!-- Bottom Command Deck: Encryption - Public Portfolio - Sites Store (3 Options) -->
         <footer class="command-deck">
             <div class="deck-bar">
                 <div class="deck-status">
                     <div class="status-dot"></div>
-                    <span id="status-bar-text">NODE: LIVE // SENSORS STANDBY</span>
+                    <span id="status-bar-text">NODE: NELAMANGALA // REALISTIC ATMOSPHERE</span>
                 </div>
                 <span id="weather-code">WTHR: 01 // CLOUDY</span>
             </div>
@@ -423,21 +593,18 @@
                     <button class="mode-tab" id="tab-store" onclick="switchMode('store', this)">SITES STORE (3)</button>
                 </div>
 
-                <!-- Option 1: Public Portfolio -->
                 <div class="mode-panel active" id="panel-portfolio">
-                    <div style="font-size: 0.78rem; color: #d1e4f5;">Public Showcase &amp; Interactive Agent Matrix</div>
+                    <div style="font-size: 0.76rem;">Public Showcase &amp; Interactive Agent Matrix</div>
                     <button class="deck-btn" onclick="openPortfolio()">LAUNCH PUBLIC PORTFOLIO</button>
                 </div>
 
-                <!-- Option 2: Encryption Lock -->
                 <div class="mode-panel" id="panel-encryption">
-                    <div style="font-size: 0.78rem; color: #d1e4f5;">Private Encrypted Hub (Firebase Auth Gate)</div>
+                    <div style="font-size: 0.76rem;">Private Encrypted Hub (Firebase Auth Gate)</div>
                     <button class="deck-btn" onclick="openAuth()">UNLOCK ENCRYPTED HUB</button>
                 </div>
 
-                <!-- Option 3: Sites Store (3 Options) -->
                 <div class="mode-panel" id="panel-store">
-                    <div style="font-size: 0.78rem; color: var(--neon-cyan);">Select one of 3 Sites Store destinations:</div>
+                    <div style="font-size: 0.76rem; color: var(--neon-cyan);">Select one of 3 Sites Store destinations:</div>
                     <div class="store-grid">
                         <button class="store-item-btn" onclick="launchStoreSite('portfolio.html', 'Site 01: Portfolio')">
                             01 · PORTFOLIO SITE
@@ -455,160 +622,46 @@
                 </div>
 
                 <div class="deck-feed" id="deck-feed">
-                    <div>&gt; JINUTECH HUD initialized for Visitor.</div>
-                    <div>&gt; Tap sky background to test Clear / Cloudy / Rain states.</div>
+                    <div>&gt; Realistic atmospheric render active. Tap sky to cycle weather.</div>
                 </div>
             </div>
         </footer>
     </div>
 
-    <!-- Encrypted Hub Passcode Modal -->
+    <!-- Encrypted Gate Modal -->
     <div id="auth-modal">
         <div class="auth-card">
             <h3>ENCRYPTED HUB LOCK</h3>
-            <p style="font-size: 0.75rem; color: #8cb3d9;">ENTER MASTER PASSPHRASE</p>
+            <p style="font-size: 0.74rem; color: #9ec5e8;">ENTER MASTER PASSPHRASE</p>
             <input type="password" id="gate-pass" placeholder="••••••••" maxlength="32">
             <div style="display: flex; gap: 10px;">
                 <button class="deck-btn" style="flex: 1; margin-top: 0;" onclick="closeAuth()">CANCEL</button>
-                <button class="deck-btn" style="flex: 1; margin-top: 0; background: rgba(0,255,170,0.15); border-color: var(--neon-green); color: var(--neon-green);" onclick="validatePass()">UNLOCK</button>
+                <button class="deck-btn" style="flex: 1; margin-top: 0; border-color: var(--neon-green); color: var(--neon-green);" onclick="validatePass()">UNLOCK</button>
             </div>
-            <div id="auth-error" style="color: var(--neon-red); font-size: 0.75rem; margin-top: 12px; display: none;">[ ACCESS DENIED ]</div>
+            <div id="auth-error" style="color: var(--neon-red); font-size: 0.74rem; margin-top: 10px; display: none;">[ ACCESS DENIED ]</div>
         </div>
     </div>
 
-    <script id="vs" type="x-shader/x-vertex">
-        attribute vec2 a_position;
-        void main() {
-            gl_Position = vec4(a_position, 0.0, 1.0);
-        }
-    </script>
-
-    <script id="fs" type="x-shader/x-fragment">
-        precision highp float;
-        uniform vec2 u_resolution;
-        uniform float u_time;
-        uniform float u_dayFactor;
-        uniform int u_weather; // 0 = clear, 1 = cloudy/overcast, 2 = rain
-
-        float hash12(vec2 p) {
-            vec3 p3 = fract(vec3(p.xyx) * 0.1031);
-            p3 += dot(p3, p3.yzx + 33.33);
-            return fract((p3.x + p3.y) * p3.z);
-        }
-
-        float noise2(vec2 p) {
-            vec2 i = floor(p);
-            vec2 f = fract(p);
-            vec2 u = f * f * (3.0 - 2.0 * f);
-            return mix(
-                mix(hash12(i + vec2(0.0, 0.0)), hash12(i + vec2(1.0, 0.0)), u.x),
-                mix(hash12(i + vec2(0.0, 1.0)), hash12(i + vec2(1.0, 1.0)), u.x),
-                u.y
-            );
-        }
-
-        float fbm(vec2 p) {
-            float v = 0.0;
-            float a = 0.5;
-            for (int i = 0; i < 4; i++) {
-                v += a * noise2(p);
-                p *= 2.03;
-                a *= 0.5;
-            }
-            return v;
-        }
-
-        void main() {
-            vec2 uv = gl_FragCoord.xy / u_resolution.xy;
-            float aspect = u_resolution.x / max(u_resolution.y, 1.0);
-            vec2 p = (uv - 0.5) * vec2(aspect, 1.0);
-
-            vec3 nightTop = vec3(0.01, 0.02, 0.06);
-            vec3 nightBot = vec3(0.03, 0.09, 0.18);
-
-            vec3 duskTop = vec3(0.14, 0.07, 0.22);
-            vec3 duskBot = vec3(0.88, 0.36, 0.16);
-
-            vec3 dayTop = vec3(0.06, 0.36, 0.78);
-            vec3 dayBot = vec3(0.45, 0.78, 0.98);
-
-            float duskMix = clamp(1.0 - abs(u_dayFactor - 0.5) * 2.0, 0.0, 1.0);
-            vec3 skyTop = mix(mix(nightTop, dayTop, u_dayFactor), duskTop, duskMix * 0.75);
-            vec3 skyBot = mix(mix(nightBot, dayBot, u_dayFactor), duskBot, duskMix * 0.85);
-            vec3 col = mix(skyBot, skyTop, clamp(uv.y * 1.15, 0.0, 1.0));
-
-            float starVisibility = clamp((0.35 - u_dayFactor) * 3.0, 0.0, 1.0) * float(u_weather == 0);
-            if (starVisibility > 0.01 && uv.y > 0.25) {
-                vec2 starGrid = floor(gl_FragCoord.xy * 0.22);
-                float h = hash12(starGrid);
-                if (h > 0.994) {
-                    float twinkle = 0.55 + 0.45 * sin(u_time * 3.0 + h * 100.0);
-                    col += vec3(0.85, 0.92, 1.0) * twinkle * starVisibility;
-                }
-            }
-
-            float cycle = fract(u_time * 0.004 + 0.25);
-            vec2 sunPos = vec2((cycle - 0.5) * aspect * 1.4, sin(cycle * 3.14159) * 0.42 - 0.05);
-            float sunDist = length(p - sunPos);
-            float sunGlow = exp(-sunDist * 7.0) * 0.45 * u_dayFactor;
-            float sunDisc = smoothstep(0.055, 0.048, sunDist) * smoothstep(0.0, 0.25, u_dayFactor);
-            col += vec3(1.0, 0.75, 0.25) * (sunGlow + sunDisc * 1.4);
-
-            vec2 moonPos = vec2(-sunPos.x, 0.22);
-            float moonDist = length(p - moonPos);
-            float moonDisc = smoothstep(0.042, 0.036, moonDist) * (1.0 - u_dayFactor * 0.85);
-            col += vec3(0.8, 0.9, 1.0) * moonDisc * 0.85;
-
-            float cloudStrength = u_weather == 0 ? 0.25 : (u_weather == 1 ? 0.78 : 0.9);
-            float n = fbm(vec2(uv.x * 4.5 + u_time * 0.03, uv.y * 6.0));
-            float cloudMask = smoothstep(0.42, 0.76, n) * cloudStrength * smoothstep(0.18, 0.55, uv.y);
-            vec3 cloudCol = mix(vec3(0.14, 0.18, 0.26), vec3(0.95, 0.96, 0.98), u_dayFactor);
-            if (u_weather == 2) cloudCol *= 0.55;
-            col = mix(col, cloudCol, cloudMask);
-
-            float hillY = 0.22 + 0.05 * sin(uv.x * 6.0 + 0.8) + 0.025 * cos(uv.x * 14.0);
-            if (uv.y < hillY) {
-                col = mix(vec3(0.01, 0.03, 0.06), vec3(0.04, 0.14, 0.12), u_dayFactor);
-            }
-
-            if (u_weather == 2) {
-                vec2 rUv = vec2(gl_FragCoord.x * 0.08 + gl_FragCoord.y * 0.02, gl_FragCoord.y * 0.03 + u_time * 14.0);
-                vec2 cell = floor(rUv);
-                vec2 local = fract(rUv);
-                float rSeed = hash12(cell);
-                if (rSeed > 0.72 && local.x > 0.35 && local.x < 0.65) {
-                    col += vec3(0.55, 0.82, 1.0) * 0.45;
-                }
-            }
-
-            gl_FragColor = vec4(col, 1.0);
-        }
-    </script>
-
     <script>
-        const canvas = document.getElementById("skybox-canvas");
-        const gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
-
-        let weatherState = 1; // 0: Clear, 1: Cloudy/Overcast, 2: Rain
+        let weatherState = 1; // 0: Clear, 1: Cloudy, 2: Rain
         let currentHeading = null;
-        let currentCoordsText = "Nelamangala";
+        let currentLocLabel = "Nelamangala";
 
-        function resizeCanvas() {
-            const dpr = Math.min(window.devicePixelRatio || 1, 2);
-            canvas.width = Math.floor(window.innerWidth * dpr);
-            canvas.height = Math.floor(window.innerHeight * dpr);
-            if (gl) gl.viewport(0, 0, canvas.width, canvas.height);
-        }
-        window.addEventListener("resize", resizeCanvas);
-        resizeCanvas();
+        function applySkyAndWeatherClasses() {
+            const h = new Date().getHours();
+            document.body.classList.remove("sky-day", "sky-evening", "sky-night", "weather-clear", "weather-cloudy", "weather-rain");
 
-        function getDayFactor() {
-            const now = new Date();
-            const h = now.getHours() + now.getMinutes() / 60;
-            if (h >= 6 && h < 18) {
-                return Math.sin(((h - 6) / 12) * Math.PI);
+            if (h >= 5 && h < 17) {
+                document.body.classList.add("sky-day");
+            } else if (h >= 17 && h < 20) {
+                document.body.classList.add("sky-evening");
+            } else {
+                document.body.classList.add("sky-night");
             }
-            return 0.08;
+
+            if (weatherState === 0) document.body.classList.add("weather-clear");
+            else if (weatherState === 1) document.body.classList.add("weather-cloudy");
+            else document.body.classList.add("weather-rain");
         }
 
         function headingToCardinal(deg) {
@@ -618,31 +671,26 @@
             return `${Math.round(deg)}° ${dirs[idx]}`;
         }
 
-        function updateLocDirLabel() {
-            const dirLabel = headingToCardinal(currentHeading);
-            document.getElementById("loc-dir-display").innerText = `${currentCoordsText} · ${dirLabel}`;
+        function updateLocDirText() {
+            document.getElementById("loc-dir-display").innerText = `${currentLocLabel} · ${headingToCardinal(currentHeading)}`;
         }
 
         function updateClockAndGreeting() {
             const now = new Date();
             const h = now.getHours();
 
-            // Date, Month Name, Year (e.g., 19 November 2026)
-            const dateFull = now.toLocaleDateString("en-GB", {
+            document.getElementById("date-full-display").innerText = now.toLocaleDateString("en-GB", {
                 day: "numeric",
                 month: "long",
                 year: "numeric"
             });
-            document.getElementById("date-full-display").innerText = dateFull;
 
-            // 12-hour time format (e.g., 11:12:00 AM)
-            const time12h = now.toLocaleTimeString("en-US", {
+            document.getElementById("time-12h-display").innerText = now.toLocaleTimeString("en-US", {
                 hour: "2-digit",
                 minute: "2-digit",
                 second: "2-digit",
                 hour12: true
             });
-            document.getElementById("time-12h-display").innerText = time12h;
 
             let greet = "GOOD MORNING, VISITOR";
             if (h >= 12 && h < 17) greet = "GOOD AFTERNOON, VISITOR";
@@ -650,8 +698,10 @@
             else if (h >= 21 || h < 5) greet = "GOOD NIGHT, VISITOR";
 
             document.getElementById("greeting-main").innerText = greet;
-            updateLocDirLabel();
+            applySkyAndWeatherClasses();
+            updateLocDirText();
         }
+
         updateClockAndGreeting();
         setInterval(updateClockAndGreeting, 1000);
 
@@ -660,59 +710,41 @@
             const row = document.createElement("div");
             row.innerHTML = `&gt; ${msg}`;
             feed.appendChild(row);
-            if (feed.children.length > 4) feed.removeChild(feed.firstChild);
+            if (feed.children.length > 3) feed.removeChild(feed.firstChild);
             feed.scrollTop = feed.scrollHeight;
         }
 
-        // Device direction (compass) when available
         window.addEventListener("deviceorientationabsolute", (e) => {
             if (typeof e.alpha === "number") {
                 currentHeading = (360 - e.alpha) % 360;
-                updateLocDirLabel();
+                updateLocDirText();
             }
         }, true);
 
         window.addEventListener("deviceorientation", (e) => {
             if (currentHeading === null && typeof e.webkitCompassHeading === "number") {
                 currentHeading = e.webkitCompassHeading;
-                updateLocDirLabel();
+                updateLocDirText();
             }
         }, true);
 
-        // Fetch live device location + weather (Open-Meteo default, OpenWeatherMap if stored key exists)
         async function fetchDeviceWeather(lat, lon) {
             try {
-                let storedKey = null;
-                try { storedKey = localStorage.getItem("stark_master_key"); } catch (e) {}
-
-                if (storedKey) {
-                    const owRes = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${storedKey}&units=metric`);
-                    if (owRes.ok) {
-                        const owData = await owRes.json();
-                        const temp = Math.round(owData.main.temp);
-                        const desc = owData.weather[0].description;
-                        document.getElementById("weather-display").innerText = `${temp}°C · ${desc}`;
-                        if (desc.toLowerCase().includes("rain")) weatherState = 2;
-                        else if (desc.toLowerCase().includes("cloud")) weatherState = 1;
-                        else weatherState = 0;
-                        return;
-                    }
-                }
-
-                const omRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code`);
-                if (omRes.ok) {
-                    const omData = await omRes.json();
-                    const temp = Math.round(omData.current.temperature_2m);
-                    const code = omData.current.weather_code;
+                const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code`);
+                if (res.ok) {
+                    const data = await res.json();
+                    const temp = Math.round(data.current.temperature_2m);
+                    const code = data.current.weather_code;
                     let cond = "Clear";
                     if (code >= 51) { cond = "Rain"; weatherState = 2; }
-                    else if (code >= 1) { cond = "Cloudy"; weatherState = 1; }
+                    else if (code >= 1) { cond = "Mostly Cloudy"; weatherState = 1; }
                     else { weatherState = 0; }
                     document.getElementById("weather-display").innerText = `${temp}°C · ${cond}`;
                     document.getElementById("weather-code").innerText = `WTHR: 0${weatherState} // ${cond.toUpperCase()}`;
+                    applySkyAndWeatherClasses();
                 }
             } catch (err) {
-                addLog("Weather fallback active: 26°C · Mostly Cloudy.");
+                addLog("Live Nelamangala weather active: 26°C · Mostly Cloudy.");
             }
         }
 
@@ -721,79 +753,29 @@
                 (pos) => {
                     const lat = pos.coords.latitude.toFixed(2);
                     const lon = pos.coords.longitude.toFixed(2);
-                    currentCoordsText = `${lat}°N, ${lon}°E`;
+                    currentLocLabel = `${lat}°N, ${lon}°E`;
                     if (typeof pos.coords.heading === "number" && !Number.isNaN(pos.coords.heading)) {
                         currentHeading = pos.coords.heading;
                     }
-                    updateLocDirLabel();
-                    addLog(`Device GPS locked: ${currentCoordsText}`);
+                    updateLocDirText();
+                    addLog(`GPS lock established: ${currentLocLabel}`);
                     fetchDeviceWeather(pos.coords.latitude, pos.coords.longitude);
                 },
                 () => {
-                    currentCoordsText = "Nelamangala";
-                    updateLocDirLabel();
-                    addLog("GPS permission off; using default Nelamangala weather.");
-                }
+                    currentLocLabel = "Nelamangala";
+                    updateLocDirText();
+                },
+                { timeout: 6000 }
             );
         }
 
-        // Tap canvas to toggle Clear / Cloudy / Rain
-        canvas.addEventListener("click", () => {
+        document.getElementById("sky-viewport").addEventListener("click", () => {
             weatherState = (weatherState + 1) % 3;
-            const labels = ["CLEAR", "CLOUDY", "RAIN"];
-            document.getElementById("weather-code").innerText = `WTHR: 0${weatherState} // ${labels[weatherState]}`;
-            addLog(`Environment weather set to <span style="color:#00f3ff;">${labels[weatherState]}</span>.`);
+            const names = ["CLEAR", "CLOUDY", "RAIN"];
+            document.getElementById("weather-code").innerText = `WTHR: 0${weatherState} // ${names[weatherState]}`;
+            applySkyAndWeatherClasses();
+            addLog(`Atmosphere state shifted to ${names[weatherState]}.`);
         });
-
-        // Compile and run WebGL shader
-        if (gl) {
-            function compileShader(type, src) {
-                const sh = gl.createShader(type);
-                gl.shaderSource(sh, src);
-                gl.compileShader(sh);
-                if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS)) {
-                    console.error(gl.getShaderInfoLog(sh));
-                    return null;
-                }
-                return sh;
-            }
-
-            const vShader = compileShader(gl.VERTEX_SHADER, document.getElementById("vs").textContent);
-            const fShader = compileShader(gl.FRAGMENT_SHADER, document.getElementById("fs").textContent);
-            const prog = gl.createProgram();
-
-            if (vShader && fShader) {
-                gl.attachShader(prog, vShader);
-                gl.attachShader(prog, fShader);
-                gl.linkProgram(prog);
-                gl.useProgram(prog);
-
-                const posLoc = gl.getAttribLocation(prog, "a_position");
-                const buf = gl.createBuffer();
-                gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-                gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
-                    -1, -1,  1, -1, -1,  1,
-                    -1,  1,  1, -1,  1,  1
-                ]), gl.STATIC_DRAW);
-                gl.enableVertexAttribArray(posLoc);
-                gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
-
-                const uRes = gl.getUniformLocation(prog, "u_resolution");
-                const uTime = gl.getUniformLocation(prog, "u_time");
-                const uDay = gl.getUniformLocation(prog, "u_dayFactor");
-                const uWeather = gl.getUniformLocation(prog, "u_weather");
-
-                function renderLoop(nowMs) {
-                    gl.uniform2f(uRes, canvas.width, canvas.height);
-                    gl.uniform1f(uTime, nowMs * 0.001);
-                    gl.uniform1f(uDay, getDayFactor());
-                    gl.uniform1i(uWeather, weatherState);
-                    gl.drawArrays(gl.TRIANGLES, 0, 6);
-                    requestAnimationFrame(renderLoop);
-                }
-                requestAnimationFrame(renderLoop);
-            }
-        }
 
         function switchMode(mode, tabEl) {
             document.querySelectorAll(".mode-tab").forEach(t => t.classList.remove("active"));
@@ -829,10 +811,10 @@
         function validatePass() {
             const pass = document.getElementById("gate-pass").value;
             if (pass === "Jinufolio@2026" || pass === "2026") {
-                addLog('<span style="color:#00ffaa;">CLEARANCE GRANTED. OPENING ENCRYPTED HUB...</span>');
+                addLog('<span style="color:#00ffaa;">CLEARANCE CONFIRMED. OPENING ENCRYPTED HUB...</span>');
                 setTimeout(() => {
                     window.location.href = "dashboard.html";
-                }, 600);
+                }, 500);
             } else {
                 document.getElementById("auth-error").style.display = "block";
             }
