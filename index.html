@@ -3,1141 +3,1028 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jaya Kumar (Jack) — Creative Developer &amp; Systems Architect</title>
+    <title>JINUTECH | Cyber-Physical Environment Engine</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Syne:wght@700;800&family=JetBrains+Mono:wght@500;700&family=Caveat:wght@600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-void: #060709;
-            --bg-surface: #0e1117;
-            --bg-card: rgba(18, 22, 31, 0.85);
-            --neon-orange: #ff551f;
-            --neon-amber: #ff9100;
             --neon-cyan: #00f3ff;
             --neon-green: #00ffaa;
-            --text-pure: #ffffff;
-            --text-secondary: #9aa3b2;
-            --text-muted: #5a6474;
-            --border: rgba(255, 255, 255, 0.08);
-            --border-glow: rgba(255, 85, 31, 0.4);
-            --font-display: 'Syne', sans-serif;
-            --font-body: 'Plus Jakarta Sans', sans-serif;
-            --font-mono: 'JetBrains Mono', monospace;
-            --font-script: 'Caveat', cursive;
+            --neon-amber: #ffaa00;
+            --neon-red: #ff0044;
+            --panel-bg: rgba(4, 11, 24, 0.92);
+            --border-glow: rgba(0, 243, 255, 0.4);
+            --font-hud: 'Share Tech Mono', monospace;
+            --font-title: 'Orbitron', sans-serif;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            user-select: none;
             -webkit-tap-highlight-color: transparent;
         }
 
-        html {
-            scroll-behavior: smooth;
+        body, html {
+            width: 100%;
+            height: 100vh;
+            height: 100dvh;
+            overflow: hidden;
+            background-color: #02050b;
+            font-family: var(--font-hud);
+            color: #d8ecff;
         }
 
-        body {
-            background-color: var(--bg-void);
-            color: var(--text-pure);
-            font-family: var(--font-body);
-            line-height: 1.5;
-            overflow-x: hidden;
-            background-image: 
-                radial-gradient(circle at 10% 10%, rgba(255, 85, 31, 0.08), transparent 45%),
-                radial-gradient(circle at 90% 40%, rgba(0, 243, 255, 0.05), transparent 50%);
-        }
-
-        a {
-            color: inherit;
-            text-decoration: none;
-        }
-
-        /* Ambient Studio Light */
-        .ambient-glow {
+        /* --- PROCEDURAL LIVE SKY --- */
+        .sky-viewport {
             position: fixed;
-            top: -150px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: min(100vw, 900px);
-            height: 480px;
-            background: radial-gradient(circle, rgba(255, 85, 31, 0.22) 0%, rgba(255, 145, 0, 0.08) 45%, transparent 75%);
-            filter: blur(80px);
-            z-index: 0;
+            inset: 0;
+            z-index: 1;
+            background: linear-gradient(180deg, #104882 0%, #2f7ec9 45%, #76b5eb 80%, #b8dbf9 100%);
+            transition: background 1.5s ease, filter 0.6s ease;
+        }
+
+        body.sky-evening .sky-viewport {
+            background: linear-gradient(180deg, #161033 0%, #4a214d 38%, #a04351 70%, #f08953 100%);
+        }
+
+        body.sky-night .sky-viewport {
+            background: linear-gradient(180deg, #020611 0%, #061426 50%, #0d2745 100%);
+        }
+
+        body.weather-cloudy .sky-viewport { filter: saturate(0.8) brightness(0.92); }
+        body.weather-rain .sky-viewport { filter: brightness(0.68) saturate(0.65); }
+
+        /* Celestial Bodies */
+        .celestial-sun, .celestial-moon {
+            position: fixed;
+            border-radius: 50%;
+            z-index: 2;
+            pointer-events: none;
+            will-change: transform;
+        }
+
+        .celestial-sun {
+            width: 88px;
+            height: 88px;
+            top: 16%;
+            right: 17%;
+            background: radial-gradient(circle, #ffffff 10%, #fff1a8 30%, #ffaa22 75%, rgba(255,160,0,0) 100%);
+            box-shadow: 0 0 45px rgba(255, 175, 40, 0.8), 0 0 95px rgba(255, 150, 0, 0.4);
+            animation: sunPulse 6s ease-in-out infinite alternate;
+        }
+
+        .celestial-moon {
+            width: 74px;
+            height: 74px;
+            top: 15%;
+            left: 17%;
+            background: radial-gradient(circle at 35% 35%, #ffffff 0%, #d8e5f2 50%, #90a8c0 100%);
+            box-shadow: 0 0 35px rgba(215, 235, 255, 0.7), inset -8px -6px 0 rgba(15, 30, 50, 0.35);
+            opacity: 0;
+            animation: sunPulse 7s ease-in-out infinite alternate;
+        }
+
+        body.sky-night .celestial-sun, body.sky-evening .celestial-sun { opacity: 0.2; }
+        body.sky-night .celestial-moon, body.sky-evening .celestial-moon { opacity: 0.95; }
+
+        @keyframes sunPulse {
+            0% { transform: scale(1) translate3d(0, 0, 0); }
+            100% { transform: scale(1.04) translate3d(8px, -6px, 0); }
+        }
+
+        /* --- CLOUD STAGE --- */
+        .cloud-stage {
+            position: fixed;
+            inset: 0;
+            z-index: 3;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .cloud-mass {
+            position: absolute;
+            width: 220vw;
+            height: 48vh;
+            top: 5%;
+            left: -30vw;
+            filter: url(#realistic-clouds) blur(1px);
+            opacity: 0.4;
+            transition: opacity 0.6s ease;
+            animation: cloudDriftSlow 75s linear infinite;
+        }
+
+        .cloud-mass.layer-foreground {
+            top: 13%;
+            opacity: 0.25;
+            animation: cloudDriftFast 45s linear infinite;
+            filter: url(#realistic-clouds) blur(2px);
+        }
+
+        body.weather-cloudy .cloud-mass { opacity: 0.9; }
+        body.weather-cloudy .cloud-mass.layer-foreground { opacity: 0.75; }
+        body.sky-night .cloud-mass { opacity: 0.3; filter: url(#realistic-clouds) brightness(0.45); }
+        body.weather-rain .cloud-mass { opacity: 0.96; filter: url(#realistic-clouds) brightness(0.48); }
+
+        @keyframes cloudDriftSlow { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-40vw, 0, 0); } }
+        @keyframes cloudDriftFast { 0% { transform: translate3d(-30vw, 0, 0); } 100% { transform: translate3d(15vw, 0, 0); } }
+
+        /* Rain Streaks from Clouds */
+        .rain-matrix {
+            position: fixed;
+            top: 14%;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 4;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 14%, black 100%);
+            mask-image: linear-gradient(to bottom, transparent 0%, black 14%, black 100%);
+            background-image: repeating-linear-gradient(
+                104deg,
+                rgba(175, 230, 255, 0.36) 0px,
+                rgba(175, 230, 255, 0.36) 1.5px,
+                transparent 1.5px,
+                transparent 22px
+            );
+            animation: rainPour 0.42s linear infinite;
+        }
+        body.weather-rain .rain-matrix { opacity: 1; }
+        @keyframes rainPour { 0% { transform: translate3d(0, -22px, 0); } 100% { transform: translate3d(-6px, 22px, 0); } }
+
+        /* --- VISIBLE MOUNTAIN RIDGES --- */
+        .mountain-container {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 66px;
+            width: 100%;
+            height: 38vh;
+            z-index: 5;
             pointer-events: none;
         }
 
-        .container {
-            position: relative;
-            z-index: 1;
-            max-width: 1220px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* --- STAGE HEADER & DYNAMIC HERO CARD --- */
-        .stage-wrapper {
-            margin: 16px auto 40px;
-        }
-
-        .hero-banner {
-            position: relative;
-            background: radial-gradient(circle at 50% 0%, #ff5e28 0%, #bd3307 36%, #4a1005 72%, #140503 94%, #0e1117 100%);
-            border-radius: 36px;
-            padding: 26px 32px 46px;
-            overflow: hidden;
-            border: 1px solid rgba(255, 120, 50, 0.35);
-            box-shadow: 0 25px 70px rgba(189, 51, 7, 0.28), inset 0 0 40px rgba(255, 94, 40, 0.15);
-        }
-
-        @media (max-width: 768px) {
-            .hero-banner {
-                padding: 20px 20px 36px;
-                border-radius: 24px;
-            }
-        }
-
-        /* Header Navigation */
-        .header-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: relative;
-            z-index: 10;
-        }
-
-        .brand-badge {
-            font-family: var(--font-display);
-            font-size: 1.15rem;
-            font-weight: 800;
-            letter-spacing: 1.5px;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .brand-badge .dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #fff;
-            box-shadow: 0 0 10px #fff;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 24px;
-            font-size: 0.88rem;
-            font-weight: 600;
-            color: rgba(255, 255, 255, 0.85);
-        }
-
-        .nav-links a:hover {
-            color: #fff;
-        }
-
-        .btn-deck-trigger {
-            background: #ffffff;
-            color: #0b0d11;
-            font-size: 0.82rem;
-            font-weight: 800;
-            padding: 10px 18px;
-            border-radius: 999px;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.25s ease;
-            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25);
-        }
-
-        .btn-deck-trigger:hover, .btn-deck-trigger:active {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(255, 255, 255, 0.35);
-        }
-
-        @media (max-width: 768px) {
-            .nav-links { display: none; }
-        }
-
-        /* Pure Editorial Typography Hero (No photo obstruction) */
-        .hero-headline-block {
-            margin-top: 50px;
-            display: grid;
-            grid-template-columns: 1.3fr 0.9fr;
-            align-items: center;
-            gap: 32px;
-        }
-
-        @media (max-width: 900px) {
-            .hero-headline-block {
-                grid-template-columns: 1fr;
-                margin-top: 36px;
-                text-align: left;
-            }
-        }
-
-        .greeting-eyebrow {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: rgba(255, 255, 255, 0.92);
-            margin-bottom: 8px;
+        .mountain-svg {
+            width: 100%;
+            height: 100%;
             display: block;
         }
 
-        .hero-big-name {
-            font-family: var(--font-display);
-            font-size: clamp(3.2rem, 8vw, 6.2rem);
-            font-weight: 800;
-            line-height: 0.94;
-            letter-spacing: -0.04em;
-            color: #ffffff;
-            margin-bottom: 18px;
-            text-shadow: 0 4px 25px rgba(0, 0, 0, 0.35);
+        /* --- TWO-WAY TRACKS & TWO-LANE HIGHWAY --- */
+        .transit-infrastructure {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 82px;
+            z-index: 6;
+            pointer-events: none;
         }
 
-        .hero-big-name span {
-            color: #ffe4d6;
+        .rail-corridor {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 28px;
+            background: #061018;
+            border-top: 1px solid rgba(0, 243, 255, 0.25);
         }
 
-        .hero-lead-text {
-            font-size: 1rem;
-            color: rgba(255, 255, 255, 0.88);
-            line-height: 1.6;
-            max-width: 480px;
+        .rail-track {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            border-top: 1px solid #6b91a6;
+            border-bottom: 1px solid #6b91a6;
+            background: repeating-linear-gradient(90deg, transparent, transparent 10px, rgba(0, 243, 255, 0.22) 10px, rgba(0, 243, 255, 0.22) 13px);
         }
 
-        /* Right Editorial Sidecard */
-        .editorial-side-panel {
-            background: rgba(0, 0, 0, 0.25);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 24px;
-            padding: 28px;
-            backdrop-filter: blur(14px);
+        .rail-upper { top: 6px; }
+        .rail-lower { top: 18px; }
+
+        .train-ltr {
+            position: absolute;
+            top: -4px;
+            left: -260px;
+            width: 220px;
+            height: 10px;
+            display: flex;
+            gap: 2px;
+            animation: trainLTR 15s linear infinite;
         }
 
-        .side-quote {
-            font-family: var(--font-display);
-            font-size: clamp(1.4rem, 2.8vw, 1.85rem);
-            font-weight: 800;
-            line-height: 1.25;
-            color: #ffffff;
-            margin-bottom: 12px;
+        .train-rtl {
+            position: absolute;
+            top: 8px;
+            left: 100vw;
+            width: 220px;
+            height: 10px;
+            display: flex;
+            gap: 2px;
+            animation: trainRTL 18s linear infinite 2s;
         }
 
-        .side-subtext {
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 0.88rem;
-            line-height: 1.55;
-            margin-bottom: 20px;
-        }
-
-        .hero-telemetry-badge {
-            display: inline-flex;
+        .train-car {
+            flex: 1;
+            height: 100%;
+            background: linear-gradient(180deg, #00f3ff, #005588);
+            border-radius: 2px;
+            box-shadow: 0 0 8px rgba(0, 243, 255, 0.45);
+            font-size: 6px;
+            display: flex;
             align-items: center;
-            gap: 10px;
-            font-family: var(--font-mono);
-            font-size: 0.76rem;
-            color: #fff;
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 6px 14px;
-            border-radius: 999px;
-        }
-
-        .pulse-core {
-            width: 7px;
-            height: 7px;
-            border-radius: 50%;
-            background: var(--neon-green);
-            box-shadow: 0 0 10px var(--neon-green);
-            animation: pulseDot 2s infinite ease-in-out;
-        }
-
-        /* 4-Pillar Strip */
-        .pillar-strip {
-            margin-top: 42px;
-            padding-top: 24px;
-            border-top: 1px solid rgba(255, 255, 255, 0.18);
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 16px;
-        }
-
-        @media (max-width: 768px) {
-            .pillar-strip {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 20px;
-            }
-        }
-
-        .pillar-idx {
-            font-family: var(--font-mono);
-            font-size: 0.72rem;
-            color: rgba(255, 255, 255, 0.65);
-            margin-bottom: 4px;
-        }
-
-        .pillar-name {
-            font-size: 0.95rem;
+            justify-content: center;
+            color: #000;
             font-weight: 800;
-            color: #ffffff;
-            letter-spacing: -0.01em;
         }
 
-        /* --- LOGO MARQUEE --- */
-        .stack-bar {
-            margin: 28px 0 65px;
-            padding: 18px 24px;
-            background: var(--bg-surface);
-            border-radius: 18px;
-            border: 1px solid var(--border);
+        .train-engine-right {
+            width: 30px;
+            background: #ffaa00;
+            box-shadow: 0 0 10px #ffaa00;
+            border-radius: 2px 5px 2px 2px;
+        }
+
+        .train-engine-left {
+            width: 30px;
+            background: #00ffaa;
+            box-shadow: 0 0 10px #00ffaa;
+            border-radius: 5px 2px 2px 2px;
+        }
+
+        @keyframes trainLTR {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(135vw); }
+        }
+
+        @keyframes trainRTL {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-135vw); }
+        }
+
+        .highway-road {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 54px;
+            background: #081119;
+            border-top: 2px solid rgba(0, 243, 255, 0.35);
+        }
+
+        .highway-divider {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            height: 2px;
+            background: repeating-linear-gradient(90deg, transparent, transparent 20px, rgba(255, 255, 255, 0.45) 20px, rgba(255, 255, 255, 0.45) 40px);
+            transform: translateY(-50%);
+        }
+
+        .lane-upper {
+            position: absolute;
+            top: 4px;
+            left: 0;
+            width: 100%;
+            height: 20px;
+            overflow: hidden;
+        }
+
+        .lane-lower {
+            position: absolute;
+            bottom: 4px;
+            left: 0;
+            width: 100%;
+            height: 20px;
+            overflow: hidden;
+        }
+
+        .vehicle-car {
+            position: absolute;
+            top: 5px;
+            width: 34px;
+            height: 9px;
+            border-radius: 3px;
+            box-shadow: 0 0 10px currentColor;
+        }
+
+        .v-upper-rtl {
+            left: 100vw;
+            background: #00ffaa;
+            color: #00ffaa;
+            animation: laneRTL 11s linear infinite;
+        }
+
+        .v-lower-ltr {
+            left: -50px;
+            background: #ff0044;
+            color: #ff0044;
+            animation: laneLTR 13s linear infinite 2s;
+        }
+
+        @keyframes laneRTL {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-130vw); }
+        }
+
+        @keyframes laneLTR {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(130vw); }
+        }
+
+        /* --- TELEMETRY HEADER --- */
+        .hud-header {
+            position: fixed;
+            top: 14px;
+            left: 16px;
+            right: 16px;
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
             align-items: center;
-            gap: 18px;
+            gap: 12px;
+            padding: 12px 18px;
+            background: rgba(3, 10, 22, 0.82);
+            border: 1px solid var(--border-glow);
+            border-radius: 10px;
+            backdrop-filter: blur(8px);
+            z-index: 20;
         }
 
-        .stack-title {
-            font-size: 0.82rem;
-            font-weight: 700;
-            color: var(--text-secondary);
-            text-transform: uppercase;
+        .brand-node h1 {
+            font-family: var(--font-title);
+            font-size: clamp(1.2rem, 3.8vw, 1.75rem);
+            letter-spacing: 2px;
+            color: #ffffff;
+            text-shadow: 0 0 14px rgba(0, 243, 255, 0.55);
+        }
+
+        .brand-node span {
+            display: block;
+            color: var(--neon-green);
+            font-size: clamp(0.78rem, 2vw, 0.95rem);
+            letter-spacing: 0.8px;
+            margin-top: 2px;
+        }
+
+        .telemetry-cluster {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .telemetry-item {
+            background: rgba(0, 243, 255, 0.06);
+            border: 1px solid rgba(0, 243, 255, 0.24);
+            padding: 6px 12px;
+            border-radius: 7px;
+            min-width: 120px;
+            text-align: right;
+        }
+
+        .telemetry-item span {
+            display: block;
+            font-size: 0.65rem;
+            color: var(--neon-cyan);
             letter-spacing: 1px;
         }
 
-        .stack-pills {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 14px;
-        }
-
-        .pill-tag {
-            font-family: var(--font-mono);
-            font-size: 0.78rem;
-            color: #fff;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid var(--border);
-            padding: 6px 12px;
-            border-radius: 8px;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.25s ease;
-        }
-
-        .pill-tag:hover {
-            border-color: var(--neon-orange);
-            color: var(--neon-orange);
-            box-shadow: 0 0 14px rgba(255, 85, 31, 0.25);
-            transform: translateY(-2px);
-        }
-
-        /* --- SECTION SYSTEM --- */
-        .sec-head {
-            margin-bottom: 32px;
-        }
-
-        .sec-tag {
-            font-family: var(--font-mono);
-            font-size: 0.78rem;
-            font-weight: 700;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: var(--neon-orange);
-            margin-bottom: 6px;
+        .telemetry-item b {
             display: block;
+            color: #ffffff;
+            font-size: clamp(0.85rem, 2.2vw, 1.02rem);
+            font-family: var(--font-title);
+            margin-top: 2px;
         }
 
-        .sec-title {
-            font-family: var(--font-display);
-            font-size: clamp(1.9rem, 4vw, 2.9rem);
-            font-weight: 800;
-            line-height: 1.1;
-            letter-spacing: -0.03em;
+        /* Center Greeting & Animated Pulse Bar */
+        .center-announcer {
+            position: fixed;
+            top: 35%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 20;
+            pointer-events: none;
+            width: 100%;
+            padding: 0 16px;
         }
 
-        /* --- NEON FLEX CARDS (SELECTED BUILDS) --- */
-        .builds-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
-            gap: 22px;
-            margin-bottom: 80px;
+        .greeting-sub {
+            font-size: 0.75rem;
+            letter-spacing: 3px;
+            color: var(--neon-cyan);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
         }
 
-        .build-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 26px;
+        .greeting-main {
+            font-family: var(--font-title);
+            font-size: clamp(1.8rem, 5.5vw, 3.4rem);
+            font-weight: 900;
+            color: #ffffff;
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.9), 0 0 24px rgba(0, 243, 255, 0.7);
+            letter-spacing: 2px;
+            line-height: 1.15;
+        }
+
+        .vis-anim-wrap {
+            width: min(220px, 60vw);
+            height: 8px;
+            margin: 12px auto 0;
+            border-radius: 999px;
+            background: rgba(2, 10, 20, 0.75);
+            border: 1px solid rgba(0, 243, 255, 0.45);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .vis-anim-sweep {
+            position: absolute;
+            top: 0;
+            left: -35%;
+            width: 35%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, var(--neon-cyan), var(--neon-green), transparent);
+            animation: sweepBar 2.1s ease-in-out infinite;
+        }
+
+        @keyframes sweepBar {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(385%); }
+        }
+
+        /* 8-Second Auto Progress Timer Bar */
+        .countdown-strip {
+            margin: 14px auto 0;
+            width: min(200px, 50vw);
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
-            gap: 18px;
-            position: relative;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .countdown-label {
+            font-size: 0.7rem;
+            color: var(--neon-cyan);
+            letter-spacing: 1px;
+        }
+
+        .countdown-bar-bg {
+            width: 100%;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 3px;
             overflow: hidden;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            cursor: pointer;
         }
 
-        .build-card::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: 20px;
-            padding: 1px;
-            background: linear-gradient(135deg, rgba(255, 85, 31, 0.6), transparent 60%);
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            opacity: 0.35;
-            transition: opacity 0.3s ease;
+        .countdown-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--neon-cyan), var(--neon-green));
+            animation: timerFill 8s linear forwards;
         }
 
-        .build-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6), 0 0 24px rgba(255, 85, 31, 0.22);
-            border-color: var(--border-glow);
+        @keyframes timerFill {
+            0% { width: 0%; }
+            100% { width: 100%; }
         }
 
-        .build-card:hover::before {
-            opacity: 1;
-        }
-
-        .card-badge-row {
+        /* --- CIRCULAR LAUNCH BUTTON (ON MOUNTAIN) --- */
+        .circular-launcher {
+            position: fixed;
+            bottom: 92px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 30;
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
             align-items: center;
         }
 
-        .card-cat-badge {
-            font-family: var(--font-mono);
-            font-size: 0.72rem;
-            letter-spacing: 1.5px;
-            color: var(--neon-orange);
-            background: rgba(255, 85, 31, 0.1);
-            border: 1px solid rgba(255, 85, 31, 0.3);
-            padding: 4px 10px;
-            border-radius: 999px;
-            text-transform: uppercase;
-        }
-
-        .card-icon {
-            font-size: 1.2rem;
-            color: var(--text-secondary);
-            transition: color 0.25s ease, transform 0.25s ease;
-        }
-
-        .build-card:hover .card-icon {
-            color: var(--neon-orange);
-            transform: translateX(4px);
-        }
-
-        .card-body h3 {
-            font-family: var(--font-display);
-            font-size: 1.45rem;
-            letter-spacing: -0.02em;
-            margin-bottom: 8px;
-            color: #fff;
-        }
-
-        .card-body p {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            line-height: 1.6;
-        }
-
-        .tech-pill-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-        }
-
-        .tech-pill {
-            font-family: var(--font-mono);
-            font-size: 0.72rem;
-            color: var(--text-muted);
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--border);
-            padding: 3px 8px;
-            border-radius: 6px;
-        }
-
-        /* --- ARTIFACTS GALLERY SYSTEM --- */
-        .gallery-controls {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 24px;
-        }
-
-        .gallery-filter-btn {
-            background: var(--bg-surface);
-            border: 1px solid var(--border);
-            color: var(--text-secondary);
-            padding: 8px 16px;
-            border-radius: 999px;
-            font-family: var(--font-mono);
-            font-size: 0.78rem;
+        .core-orb-btn {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0, 243, 255, 0.28) 0%, rgba(4, 11, 24, 0.95) 75%);
+            border: 2px solid var(--neon-cyan);
+            box-shadow: 0 0 24px rgba(0, 243, 255, 0.65), inset 0 0 14px rgba(0, 243, 255, 0.4);
             cursor: pointer;
-            transition: all 0.25s ease;
-        }
-
-        .gallery-filter-btn.active, .gallery-filter-btn:hover {
-            background: var(--neon-orange);
-            border-color: var(--neon-orange);
-            color: #fff;
-            box-shadow: 0 0 16px rgba(255, 85, 31, 0.35);
-        }
-
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 18px;
-            margin-bottom: 80px;
-        }
-
-        .gallery-item {
-            background: var(--bg-surface);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 20px;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
-            gap: 14px;
+            align-items: center;
+            justify-content: center;
             transition: all 0.3s ease;
         }
 
-        .gallery-item.hidden {
-            display: none;
+        .core-orb-btn:hover, .core-orb-btn:active {
+            transform: scale(1.08);
+            box-shadow: 0 0 32px var(--neon-cyan), inset 0 0 22px var(--neon-green);
+            border-color: var(--neon-green);
         }
 
-        .gallery-item:hover {
-            border-color: var(--neon-cyan);
-            transform: translateY(-4px);
-            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 243, 255, 0.15);
-        }
-
-        .gallery-visual-mock {
-            height: 120px;
-            border-radius: 10px;
-            background: linear-gradient(145deg, #121824, #080b10);
-            border: 1px solid rgba(0, 243, 255, 0.2);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            font-family: var(--font-mono);
-            font-size: 0.82rem;
+        .orb-icon {
+            font-size: 19px;
             color: var(--neon-cyan);
-            gap: 8px;
+            transition: transform 0.35s ease;
         }
 
-        .gallery-item h4 {
-            font-family: var(--font-display);
-            font-size: 1.05rem;
-            color: #fff;
-        }
-
-        .gallery-item p {
-            color: var(--text-secondary);
-            font-size: 0.82rem;
-            line-height: 1.5;
-        }
-
-        /* --- EDUCATION, WORKFLOW & SIGNATURE TRIO --- */
-        .editorial-trio {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 22px;
-            margin-bottom: 80px;
-        }
-
-        @media (max-width: 960px) {
-            .editorial-trio {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .trio-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 28px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .trio-label {
-            font-family: var(--font-mono);
-            font-size: 0.8rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: var(--text-pure);
-            margin-bottom: 20px;
-            display: block;
-        }
-
-        .timeline-list {
-            display: flex;
-            flex-direction: column;
-            gap: 18px;
-            margin-bottom: 22px;
-        }
-
-        .timeline-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 10px;
-            gap: 12px;
-        }
-
-        .timeline-row strong {
-            display: block;
-            font-size: 0.9rem;
-            color: #fff;
-        }
-
-        .timeline-row span {
-            font-size: 0.78rem;
-            color: var(--text-secondary);
-        }
-
-        .timeline-row small {
-            font-family: var(--font-mono);
-            font-size: 0.74rem;
-            color: var(--neon-amber);
-            white-space: nowrap;
-        }
-
-        /* Workflow Steps */
-        .workflow-col {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .wf-node {
-            display: flex;
-            gap: 14px;
-            align-items: flex-start;
-        }
-
-        .wf-num {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            background: rgba(255, 85, 31, 0.12);
-            border: 1px solid var(--border-glow);
-            color: var(--neon-orange);
-            font-family: var(--font-mono);
-            font-size: 0.74rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
-        .wf-copy strong {
-            display: block;
-            font-family: var(--font-mono);
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            color: var(--neon-orange);
-            margin-bottom: 2px;
-        }
-
-        .wf-copy p {
-            font-size: 0.78rem;
-            color: var(--text-secondary);
-            line-height: 1.45;
-        }
-
-        /* Manifesto Signature Box */
-        .manifesto-box {
-            background: linear-gradient(145deg, #ff551f, #c73200);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: #ffffff;
-            box-shadow: 0 16px 45px rgba(255, 85, 31, 0.35);
-        }
-
-        .quote-glyph {
-            font-size: 2.4rem;
-            opacity: 0.45;
-            line-height: 1;
-            margin-bottom: 8px;
-        }
-
-        .manifesto-text {
-            font-size: 1.25rem;
-            font-weight: 800;
-            line-height: 1.4;
-            margin-bottom: 22px;
-        }
-
-        .signature-text {
-            font-family: var(--font-script);
-            font-size: 2.8rem;
-            line-height: 1;
-            margin-bottom: 20px;
-        }
-
-        .deck-shortcut-btn {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-family: var(--font-mono);
-            font-size: 0.8rem;
-            font-weight: 700;
+        .orb-tag {
+            font-size: 8px;
             letter-spacing: 1px;
-            text-transform: uppercase;
-            border-top: 1px solid rgba(255, 255, 255, 0.3);
-            padding-top: 14px;
+            color: var(--neon-green);
+            margin-top: 2px;
+            font-weight: bold;
         }
 
-        /* --- CONTACT DOCK --- */
-        .contact-dock {
-            background: var(--bg-surface);
-            border: 1px solid var(--border);
-            border-radius: 24px;
-            padding: 42px 36px;
-            display: grid;
-            grid-template-columns: 1.2fr 0.8fr;
-            gap: 36px;
-            align-items: center;
-            margin-bottom: 60px;
-        }
-
-        @media (max-width: 800px) {
-            .contact-dock {
-                grid-template-columns: 1fr;
-                padding: 28px 22px;
-            }
-        }
-
-        .contact-dock h2 {
-            font-family: var(--font-display);
-            font-size: clamp(2.2rem, 4.5vw, 3.2rem);
-            font-weight: 800;
-            line-height: 1;
-            margin-bottom: 12px;
-        }
-
-        .contact-dock h2 span {
-            color: var(--neon-orange);
-        }
-
-        .contact-links {
-            display: flex;
+        .launcher-menu {
+            position: absolute;
+            bottom: 78px;
+            width: min(92vw, 370px);
+            background: var(--panel-bg);
+            border: 1px solid var(--border-glow);
+            border-radius: 14px;
+            padding: 15px;
+            backdrop-filter: blur(14px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 243, 255, 0.3);
+            display: none;
             flex-direction: column;
-            gap: 14px;
+            gap: 9px;
+            transform-origin: bottom center;
+            animation: menuPopup 0.25s ease forwards;
         }
 
-        .contact-row-link {
+        .launcher-menu.open { display: flex; }
+
+        @keyframes menuPopup {
+            from { opacity: 0; transform: scale(0.88) translateY(14px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .menu-title {
+            font-size: 0.72rem;
+            letter-spacing: 2px;
+            color: var(--neon-cyan);
+            text-align: center;
+            border-bottom: 1px solid rgba(0, 243, 255, 0.2);
+            padding-bottom: 6px;
+        }
+
+        .launch-btn {
+            background: rgba(0, 243, 255, 0.08);
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            color: #ffffff;
+            padding: 11px 14px;
+            border-radius: 8px;
+            font-family: var(--font-hud);
+            font-size: 0.82rem;
+            letter-spacing: 1px;
+            cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 14px;
-            font-family: var(--font-mono);
-            font-size: 0.88rem;
-            color: #fff;
-            transition: color 0.2s ease;
-        }
-
-        .contact-row-link i {
-            color: var(--neon-orange);
-            font-size: 1.15rem;
-            width: 22px;
-        }
-
-        .contact-row-link:hover {
-            color: var(--neon-amber);
-        }
-
-        /* Footer */
-        footer {
-            border-top: 1px solid var(--border);
-            padding: 26px 0 38px;
-            display: flex;
             justify-content: space-between;
-            align-items: center;
-            font-family: var(--font-mono);
-            font-size: 0.78rem;
-            color: var(--text-muted);
+            transition: all 0.2s ease;
         }
 
-        @media (max-width: 600px) {
-            footer {
-                flex-direction: column;
-                gap: 12px;
-                text-align: center;
-            }
+        .launch-btn:hover {
+            background: var(--neon-cyan);
+            color: #000;
+        }
+
+        .launch-btn.secure {
+            border-color: rgba(255, 0, 68, 0.5);
+            background: rgba(255, 0, 68, 0.08);
+        }
+
+        .launch-btn.secure:hover {
+            background: var(--neon-red);
+            color: #fff;
+        }
+
+        .store-subdrawer {
+            display: none;
+            flex-direction: column;
+            gap: 6px;
+            margin-top: 2px;
+            padding: 8px;
+            background: rgba(0, 5, 12, 0.75);
+            border-radius: 6px;
+            border: 1px dashed rgba(0, 243, 255, 0.3);
+        }
+
+        .store-subdrawer.active { display: flex; }
+
+        .sub-site-btn {
+            background: rgba(0, 243, 255, 0.1);
+            border: 1px solid rgba(0, 243, 255, 0.22);
+            color: #aae0fa;
+            padding: 8px 10px;
+            border-radius: 4px;
+            font-size: 0.74rem;
+            cursor: pointer;
+            text-align: left;
+        }
+
+        .sub-site-btn:hover {
+            background: rgba(0, 255, 170, 0.2);
+            color: #fff;
+        }
+
+        #auth-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 5, 12, 0.9);
+            backdrop-filter: blur(8px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            padding: 16px;
+        }
+
+        .auth-card {
+            width: min(92vw, 360px);
+            background: var(--panel-bg);
+            border: 1px solid var(--neon-cyan);
+            border-radius: 10px;
+            padding: 22px;
+            text-align: center;
+        }
+
+        .auth-card input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.65);
+            border: 1px solid var(--border-glow);
+            padding: 11px;
+            text-align: center;
+            font-family: var(--font-hud);
+            font-size: 1.05rem;
+            color: var(--neon-cyan);
+            margin: 14px 0;
+            letter-spacing: 3px;
+            outline: none;
+            border-radius: 4px;
         }
     </style>
 </head>
-<body>
+<body class="sky-day weather-cloudy">
 
-    <div class="ambient-glow" aria-hidden="true"></div>
+    <div class="sky-viewport" id="sky-viewport"></div>
+    <div class="celestial-sun"></div>
+    <div class="celestial-moon"></div>
 
-    <div class="container">
+    <div class="cloud-stage">
+        <svg style="position: absolute; width: 0; height: 0;">
+            <filter id="realistic-clouds" x="0%" y="0%" width="100%" height="100%">
+                <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="4" seed="42" result="noise" />
+                <feDisplacementMap in="SourceGraphic" in2="noise" scale="65" xChannelSelector="R" yChannelSelector="G" />
+            </filter>
+        </svg>
 
-        <!-- --- SUNSET STAGE HERO --- -->
-        <div class="stage-wrapper">
-            <section class="hero-banner">
-                <header class="header-bar">
-                    <a href="index.html" class="brand-badge">
-                        <span class="dot"></span> JINUTECH
-                    </a>
-                    <nav class="nav-links">
-                        <a href="#builds">Builds</a>
-                        <a href="#gallery">Gallery</a>
-                        <a href="#about">Experience</a>
-                        <a href="#contact">Contact</a>
-                    </nav>
-                    <a href="index.html" class="btn-deck-trigger">
-                        <span>Environment Deck</span> <i class="fas fa-arrow-right"></i>
-                    </a>
-                </header>
+        <svg class="cloud-mass" viewBox="0 0 1200 400" preserveAspectRatio="none">
+            <defs>
+                <radialGradient id="cloudGrad1" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95"/>
+                    <stop offset="55%" stop-color="#eaf3fc" stop-opacity="0.8"/>
+                    <stop offset="100%" stop-color="#cfdfee" stop-opacity="0"/>
+                </radialGradient>
+            </defs>
+            <ellipse cx="250" cy="180" rx="240" ry="110" fill="url(#cloudGrad1)"/>
+            <ellipse cx="600" cy="160" rx="320" ry="140" fill="url(#cloudGrad1)"/>
+            <ellipse cx="980" cy="190" rx="260" ry="120" fill="url(#cloudGrad1)"/>
+        </svg>
 
-                <div class="hero-headline-block">
-                    <div>
-                        <span class="greeting-eyebrow">Hey, I'm</span>
-                        <h1 class="hero-big-name">
-                            Jaya<br>
-                            <span>Kumar</span>
-                        </h1>
-                        <p class="hero-lead-text">
-                            Software &amp; Python developer based in Nelamangala, Bengaluru. Focused on local-first data systems, mobile safety engines, and resilient web engineering.
-                        </p>
-                    </div>
+        <svg class="cloud-mass layer-foreground" viewBox="0 0 1200 400" preserveAspectRatio="none">
+            <defs>
+                <radialGradient id="cloudGrad2" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#ffffff" stop-opacity="0.75"/>
+                    <stop offset="65%" stop-color="#dfeefa" stop-opacity="0.55"/>
+                    <stop offset="100%" stop-color="#bed6ec" stop-opacity="0"/>
+                </radialGradient>
+            </defs>
+            <ellipse cx="380" cy="220" rx="310" ry="120" fill="url(#cloudGrad2)"/>
+            <ellipse cx="820" cy="200" rx="340" ry="130" fill="url(#cloudGrad2)"/>
+        </svg>
+    </div>
 
-                    <div class="editorial-side-panel">
-                        <div class="side-quote">
-                            Great systems feel effortless.
-                        </div>
-                        <p class="side-subtext">
-                            Zero-cloud mobile execution, local SQLite storage, and clean automated architectures designed to stay dependable under load.
-                        </p>
-                        <div class="hero-telemetry-badge">
-                            <span class="pulse-core"></span>
-                            <span>BENGALURU GRID // ONLINE</span>
-                        </div>
-                    </div>
-                </div>
+    <div class="rain-matrix"></div>
 
-                <div class="pillar-strip">
-                    <div>
-                        <div class="pillar-idx">#01</div>
-                        <div class="pillar-name">Python Backend</div>
-                    </div>
-                    <div>
-                        <div class="pillar-idx">#02</div>
-                        <div class="pillar-name">Mobile Security</div>
-                    </div>
-                    <div>
-                        <div class="pillar-idx">#03</div>
-                        <div class="pillar-name">Web Architecture</div>
-                    </div>
-                    <div>
-                        <div class="pillar-idx">#04</div>
-                        <div class="pillar-name">Local Voice AI</div>
-                    </div>
-                </div>
-            </section>
+    <!-- MOUNTAIN RIDGES -->
+    <div class="mountain-container">
+        <svg class="mountain-svg" viewBox="0 0 1440 450" preserveAspectRatio="none">
+            <path d="M0,180 Q220,90 460,160 T920,110 T1440,150 L1440,450 L0,450 Z" fill="#183a48" opacity="0.45" />
+            <path d="M0,230 Q160,130 380,210 T760,150 T1140,200 T1440,160 L1440,450 L0,450 Z" fill="#102f35" opacity="0.75" />
+            <path d="M0,270 C220,190 380,290 640,210 C880,140 1080,260 1440,200 L1440,450 L0,450 Z" fill="#0b2424" opacity="0.9" />
+            <path d="M0,320 C320,240 620,330 920,270 C1200,210 1340,300 1440,250 L1440,450 L0,450 Z" fill="#051614" />
+        </svg>
+    </div>
 
-            <!-- Stack Bar -->
-            <div class="stack-bar">
-                <span class="stack-title">Core Development Stack</span>
-                <div class="stack-pills">
-                    <span class="pill-tag"><i class="fab fa-python"></i> Python</span>
-                    <span class="pill-tag"><i class="fab fa-android"></i> Android</span>
-                    <span class="pill-tag"><i class="fab fa-js"></i> JavaScript</span>
-                    <span class="pill-tag"><i class="fas fa-database"></i> SQLite / MySQL</span>
-                    <span class="pill-tag"><i class="fab fa-github"></i> Git / GitHub</span>
-                    <span class="pill-tag"><i class="fab fa-html5"></i> HTML5 / CSS3</span>
-                </div>
+    <!-- TWO-WAY TRAIN TRACKS & TWO-LANE HIGHWAY -->
+    <div class="transit-infrastructure">
+        <div class="rail-corridor">
+            <div class="rail-track rail-upper"></div>
+            <div class="train-ltr">
+                <div class="train-car">NET</div>
+                <div class="train-car">HTML</div>
+                <div class="train-car">CSS</div>
+                <div class="train-car train-engine-right">SYS</div>
+            </div>
+
+            <div class="rail-track rail-lower"></div>
+            <div class="train-rtl">
+                <div class="train-car train-engine-left">AI</div>
+                <div class="train-car">JS</div>
+                <div class="train-car">PY</div>
+                <div class="train-car">SEC</div>
             </div>
         </div>
 
-        <!-- --- SELECTED BUILDS (NEON FLEX CARDS) --- -->
-        <section id="builds">
-            <div class="sec-head">
-                <span class="sec-tag">// OPERATIONAL CORE</span>
-                <h2 class="sec-title">Selected Software Builds</h2>
+        <div class="highway-road">
+            <div class="lane-upper">
+                <div class="vehicle-car v-upper-rtl"></div>
             </div>
-
-            <div class="builds-grid">
-                <!-- Build 1: Raksha-Suraksha -->
-                <article class="build-card" onclick="handleCardNav('https://jayakumar-2004.github.io/Sentinel-Web-Command/')">
-                    <div class="card-badge-row">
-                        <span class="card-cat-badge">Mobile Safety</span>
-                        <i class="fas fa-shield-halved card-icon"></i>
-                    </div>
-                    <div class="card-body">
-                        <h3>Raksha-Suraksha</h3>
-                        <p>Personal safety and anti-theft mobile architecture with silent SMS SOS routing, remote lock triggers, and offline geolocation radar.</p>
-                    </div>
-                    <div class="tech-pill-row">
-                        <span class="tech-pill">Android</span>
-                        <span class="tech-pill">Java</span>
-                        <span class="tech-pill">Offline Maps</span>
-                    </div>
-                </article>
-
-                <!-- Build 2: J.A.R.V.I.S. / Leo -->
-                <article class="build-card" onclick="handleCardNav('#about')">
-                    <div class="card-badge-row">
-                        <span class="card-cat-badge">Voice Intelligence</span>
-                        <i class="fas fa-microphone-lines card-icon"></i>
-                    </div>
-                    <div class="card-body">
-                        <h3>J.A.R.V.I.S. / Leo</h3>
-                        <p>Fully offline desktop and mobile voice engine built using Vosk speech models, local Python intent handlers, and real-time TTS synthesis.</p>
-                    </div>
-                    <div class="tech-pill-row">
-                        <span class="tech-pill">Python</span>
-                        <span class="tech-pill">Vosk</span>
-                        <span class="tech-pill">Offline LLM</span>
-                    </div>
-                </article>
-
-                <!-- Build 3: JINUTECH Deck -->
-                <article class="build-card" onclick="handleCardNav('index.html')">
-                    <div class="card-badge-row">
-                        <span class="card-cat-badge">Atmospheric Hub</span>
-                        <i class="fas fa-cloud-sun card-icon"></i>
-                    </div>
-                    <div class="card-body">
-                        <h3>JINUTECH Deck</h3>
-                        <p>Time-synchronized cyber-physical environment engine featuring live local sun/moon elevation, procedural clouds, and three-option launch routing.</p>
-                    </div>
-                    <div class="tech-pill-row">
-                        <span class="tech-pill">HTML5</span>
-                        <span class="tech-pill">CSS Shaders</span>
-                        <span class="tech-pill">Geolocation</span>
-                    </div>
-                </article>
+            <div class="highway-divider"></div>
+            <div class="lane-lower">
+                <div class="vehicle-car v-lower-ltr"></div>
             </div>
-        </section>
+        </div>
+    </div>
 
-        <!-- --- ARTIFACTS GALLERY --- -->
-        <section id="gallery">
-            <div class="sec-head">
-                <span class="sec-tag">// ARTIFACTS &amp; LABS</span>
-                <h2 class="sec-title">Project Gallery</h2>
+    <!-- HUD TELEMETRY HEADER -->
+    <header class="hud-header">
+        <div class="brand-node">
+            <h1>JINUTECH</h1>
+            <span id="date-full-display">19 November 2026</span>
+        </div>
+
+        <div class="telemetry-cluster">
+            <div class="telemetry-item">
+                <span>12H TIME</span>
+                <b id="time-12h-display">--:--:-- --</b>
             </div>
-
-            <div class="gallery-controls">
-                <button class="gallery-filter-btn active" onclick="filterGallery('all', this)">All Artifacts</button>
-                <button class="gallery-filter-btn" onclick="filterGallery('mobile', this)">Mobile &amp; Security</button>
-                <button class="gallery-filter-btn" onclick="filterGallery('python', this)">Python &amp; AI</button>
-                <button class="gallery-filter-btn" onclick="filterGallery('web', this)">Web &amp; Cloud</button>
+            <div class="telemetry-item">
+                <span>LOC &amp; DIR</span>
+                <b id="loc-dir-display">Nelamangala · --°</b>
             </div>
-
-            <div class="gallery-grid" id="gallery-grid">
-                <div class="gallery-item" data-category="mobile">
-                    <div class="gallery-visual-mock">
-                        <i class="fas fa-mobile-screen-button fa-2x"></i>
-                        <span>ANDROID APK CORE</span>
-                    </div>
-                    <div>
-                        <h4>Raksha Anti-Theft Sentinel</h4>
-                        <p>Offline device security and silent emergency beacon system.</p>
-                    </div>
-                </div>
-
-                <div class="gallery-item" data-category="python">
-                    <div class="gallery-visual-mock">
-                        <i class="fas fa-wave-square fa-2x"></i>
-                        <span>VOSK RECOGNIZER</span>
-                    </div>
-                    <div>
-                        <h4>Leo Offline Voice Agent</h4>
-                        <p>Zero-cloud voice assistant running directly on localized hardware.</p>
-                    </div>
-                </div>
-
-                <div class="gallery-item" data-category="web">
-                    <div class="gallery-visual-mock">
-                        <i class="fas fa-network-wired fa-2x"></i>
-                        <span>WEB COMMAND PORTAL</span>
-                    </div>
-                    <div>
-                        <h4>Sentinel Web Command</h4>
-                        <p>Centralized client web interface for sending encrypted device directives.</p>
-                    </div>
-                </div>
-
-                <div class="gallery-item" data-category="python">
-                    <div class="gallery-visual-mock">
-                        <i class="fas fa-database fa-2x"></i>
-                        <span>SQLITE PIPELINE</span>
-                    </div>
-                    <div>
-                        <h4>Local Inventory &amp; ERP</h4>
-                        <p>Lightweight transactional accounting system built for mobile terminals.</p>
-                    </div>
-                </div>
+            <div class="telemetry-item">
+                <span>WEATHER</span>
+                <b id="weather-display">Cloudy</b>
             </div>
-        </section>
+        </div>
+    </header>
 
-        <!-- --- EDUCATION, WORKFLOW & SIGNATURE --- -->
-        <section id="about">
-            <div class="editorial-trio">
-                <div class="trio-card">
-                    <div>
-                        <span class="trio-label">Education &amp; Background</span>
-                        <div class="timeline-list">
-                            <div class="timeline-row">
-                                <div>
-                                    <strong>BCA Degree (NEP)</strong>
-                                    <span>Harsha Institute · Bangalore Univ</span>
-                                </div>
-                                <small>7.26 CGPA</small>
-                            </div>
-                            <div class="timeline-row">
-                                <div>
-                                    <strong>Python Developer Intern</strong>
-                                    <span>Codec Technologies</span>
-                                </div>
-                                <small>MAY 2026</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <span class="trio-label" style="margin-bottom: 12px;">Core Tooling</span>
-                        <div class="tech-pill-row">
-                            <span class="tech-pill">Python</span>
-                            <span class="tech-pill">Android</span>
-                            <span class="tech-pill">JavaScript</span>
-                            <span class="tech-pill">SQL / MySQL</span>
-                            <span class="tech-pill">PHP</span>
-                            <span class="tech-pill">Git / GitHub</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="trio-card">
-                    <span class="trio-label">Engineering Workflow</span>
-                    <div class="workflow-col">
-                        <div class="wf-node">
-                            <div class="wf-num">01</div>
-                            <div class="wf-copy">
-                                <strong>Problem Scope</strong>
-                                <p>Defining security criteria, privacy limits, and fast hardware bounds.</p>
-                            </div>
-                        </div>
-                        <div class="wf-node">
-                            <div class="wf-num">02</div>
-                            <div class="wf-copy">
-                                <strong>Local-First Design</strong>
-                                <p>Designing localized databases and offline pipelines that never leak telemetry.</p>
-                            </div>
-                        </div>
-                        <div class="wf-node">
-                            <div class="wf-num">03</div>
-                            <div class="wf-copy">
-                                <strong>Implementation</strong>
-                                <p>Writing modular, readable code across Python, web stacks, and Android.</p>
-                            </div>
-                        </div>
-                        <div class="wf-node">
-                            <div class="wf-num">04</div>
-                            <div class="wf-copy">
-                                <strong>Physical Hardware Profiling</strong>
-                                <p>Benchmarking execution speed and power draw directly on client devices.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="trio-card manifesto-box">
-                    <div>
-                        <div class="quote-glyph">“</div>
-                        <div class="manifesto-text">
-                            Good software runs locally, protects privacy, and stays fast under pressure.
-                        </div>
-                    </div>
-                    <div>
-                        <div class="signature-text">Jack</div>
-                        <a href="index.html" class="deck-shortcut-btn">
-                            <span>Return to Environment Deck</span>
-                            <i class="fas fa-arrow-right"></i>
-                        </a>
-                    </div>
-                </div>
+    <!-- CENTER VISITOR GREETING + 8-SEC AUTO REDIRECT -->
+    <div class="center-announcer">
+        <div class="greeting-sub">// VISITOR TELEMETRY SYNC</div>
+        <h2 class="greeting-main" id="greeting-main">GOOD AFTERNOON, VISITOR</h2>
+        <div class="vis-anim-wrap">
+            <div class="vis-anim-sweep"></div>
+        </div>
+        <div class="countdown-strip">
+            <span class="countdown-label" id="timer-text">LAUNCHING PORTFOLIO IN 8s</span>
+            <div class="countdown-bar-bg">
+                <div class="countdown-bar-fill"></div>
             </div>
-        </section>
+        </div>
+    </div>
 
-        <!-- --- CONTACT DOCK --- -->
-        <section id="contact">
-            <div class="contact-dock">
-                <div>
-                    <h2>Let's Build <span>Together</span></h2>
-                    <p style="color: var(--text-secondary); font-size: 0.92rem; line-height: 1.6; margin-bottom: 20px;">
-                        Open for entry-level Python backend, software engineering, and full-stack development opportunities across Bengaluru.
-                    </p>
-                    <a href="https://github.com/starktechdev26" target="_blank" rel="noopener" class="btn-deck-trigger">
-                        <span>Explore GitHub Profile</span> <i class="fab fa-github"></i>
-                    </a>
-                </div>
+    <!-- CIRCULAR COMMAND TRIGGER ON MOUNTAIN -->
+    <div class="circular-launcher">
+        <div class="launcher-menu" id="launcher-menu">
+            <div class="menu-title">// COMMAND &amp; LAUNCH MATRIX</div>
 
-                <div class="contact-links">
-                    <a href="https://github.com/starktechdev26" target="_blank" rel="noopener" class="contact-row-link">
-                        <i class="fab fa-github"></i>
-                        <span>github.com/starktechdev26</span>
-                    </a>
-                    <a href="https://github.com/JayaKumar-2004" target="_blank" rel="noopener" class="contact-row-link">
-                        <i class="fas fa-code-branch"></i>
-                        <span>github.com/JayaKumar-2004</span>
-                    </a>
-                    <div class="contact-row-link">
-                        <i class="fas fa-location-dot"></i>
-                        <span>Nelamangala, Bengaluru, Karnataka</span>
-                    </div>
-                </div>
+            <button class="launch-btn" onclick="openPortfolio()">
+                <span>PUBLIC PORTFOLIO</span>
+                <span>➔</span>
+            </button>
+
+            <button class="launch-btn secure" onclick="openAuth()">
+                <span>ENCRYPTED HUB [LOCK]</span>
+                <span>⚿</span>
+            </button>
+
+            <button class="launch-btn" onclick="toggleStoreSubdrawer()">
+                <span>SITES STORE (3)</span>
+                <span id="store-arrow">▼</span>
+            </button>
+
+            <div class="store-subdrawer" id="store-subdrawer">
+                <button class="sub-site-btn" onclick="launchSite('portfolio.html')">
+                    01 · PORTFOLIO SITE (Interactive Builds)
+                </button>
+                <button class="sub-site-btn" onclick="launchSite('https://jayakumar-2004.github.io/Sentinel-Web-Command/')">
+                    02 · RAKSHA-SURAKSHA WEB (Live Terminal)
+                </button>
+                <button class="sub-site-btn" onclick="openAuth()">
+                    03 · STARK MASTER OS (Encrypted Control)
+                </button>
             </div>
-        </section>
+        </div>
 
-        <footer>
-            <div>© 2026 Jaya Kumar · JINUTECH</div>
-            <div>Built for High Speed &amp; Precision</div>
-        </footer>
+        <button class="core-orb-btn" id="core-orb-btn" onclick="toggleLauncherMenu()" aria-label="Toggle Navigation Hub">
+            <div class="orb-icon" id="orb-icon">❖</div>
+            <span class="orb-tag">MENU</span>
+        </button>
+    </div>
 
+    <!-- AUTHENTICATION MODAL -->
+    <div id="auth-modal">
+        <div class="auth-card">
+            <h3>ENCRYPTED HUB LOCK</h3>
+            <p style="font-size: 0.74rem; color: #9ec5e8;">ENTER MASTER PASSPHRASE</p>
+            <input type="password" id="gate-pass" placeholder="••••••••" maxlength="32">
+            <div style="display: flex; gap: 10px;">
+                <button class="launch-btn" style="flex: 1; justify-content: center;" onclick="closeAuth()">CANCEL</button>
+                <button class="launch-btn" style="flex: 1; justify-content: center; border-color: var(--neon-green); color: var(--neon-green);" onclick="validatePass()">UNLOCK</button>
+            </div>
+            <div id="auth-error" style="color: var(--neon-red); font-size: 0.75rem; margin-top: 10px; display: none;">[ ACCESS DENIED ]</div>
+        </div>
     </div>
 
     <script>
-        // Gallery Filter Logic
-        function filterGallery(category, btn) {
-            document.querySelectorAll(".gallery-filter-btn").forEach(b => b.classList.remove("active"));
-            btn.classList.add("active");
+        let weatherState = 1; // 0: Clear, 1: Cloudy, 2: Rain
+        let currentHeading = null;
+        let currentLocLabel = "Nelamangala";
+        let isRedirecting = false;
 
-            const items = document.querySelectorAll(".gallery-item");
-            items.forEach(item => {
-                if (category === "all" || item.getAttribute("data-category") === category) {
-                    item.classList.remove("hidden");
-                } else {
-                    item.classList.add("hidden");
-                }
-            });
+        function applySkyAndWeatherClasses() {
+            const h = new Date().getHours();
+            document.body.classList.remove("sky-day", "sky-evening", "sky-night", "weather-clear", "weather-cloudy", "weather-rain");
+
+            if (h >= 5 && h < 17) document.body.classList.add("sky-day");
+            else if (h >= 17 && h < 20) document.body.classList.add("sky-evening");
+            else document.body.classList.add("sky-night");
+
+            if (weatherState === 0) document.body.classList.add("weather-clear");
+            else if (weatherState === 1) document.body.classList.add("weather-cloudy");
+            else document.body.classList.add("weather-rain");
         }
 
-        // Direct Card Navigation (Zero-delay tap handling)
-        function handleCardNav(targetUrl) {
-            if (targetUrl.startsWith("#")) {
-                const el = document.querySelector(targetUrl);
-                if (el) el.scrollIntoView({ behavior: "smooth" });
-            } else if (targetUrl.startsWith("http")) {
-                window.open(targetUrl, "_blank", "noopener,noreferrer");
+        function headingToCardinal(deg) {
+            if (typeof deg !== "number" || Number.isNaN(deg)) return "--°";
+            const dirs = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
+            const idx = Math.round(((deg % 360) + 360) % 360 / 45) % 8;
+            return `${Math.round(deg)}° ${dirs[idx]}`;
+        }
+
+        function updateLocDirText() {
+            document.getElementById("loc-dir-display").innerText = `${currentLocLabel} · ${headingToCardinal(currentHeading)}`;
+        }
+
+        function updateClockAndGreeting() {
+            const now = new Date();
+            const h = now.getHours();
+
+            document.getElementById("date-full-display").innerText = now.toLocaleDateString("en-GB", {
+                day: "numeric",
+                month: "long",
+                year: "numeric"
+            });
+
+            document.getElementById("time-12h-display").innerText = now.toLocaleTimeString("en-US", {
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+                hour12: true
+            });
+
+            let greet = "GOOD MORNING, VISITOR";
+            if (h >= 12 && h < 17) greet = "GOOD AFTERNOON, VISITOR";
+            else if (h >= 17 && h < 21) greet = "GOOD EVENING, VISITOR";
+            else if (h >= 21 || h < 5) greet = "GOOD NIGHT, VISITOR";
+
+            document.getElementById("greeting-main").innerText = greet;
+            applySkyAndWeatherClasses();
+            updateLocDirText();
+        }
+
+        updateClockAndGreeting();
+        setInterval(updateClockAndGreeting, 1000);
+
+        window.addEventListener("deviceorientationabsolute", (e) => {
+            if (typeof e.alpha === "number") {
+                currentHeading = (360 - e.alpha) % 360;
+                updateLocDirText();
+            }
+        }, true);
+
+        window.addEventListener("deviceorientation", (e) => {
+            if (currentHeading === null && typeof e.webkitCompassHeading === "number") {
+                currentHeading = e.webkitCompassHeading;
+                updateLocDirText();
+            }
+        }, true);
+
+        async function fetchDeviceWeather(lat, lon) {
+            try {
+                const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code`);
+                if (res.ok) {
+                    const data = await res.json();
+                    const temp = Math.round(data.current.temperature_2m);
+                    const code = data.current.weather_code;
+                    let cond = "Clear";
+                    if (code >= 51) { cond = "Rain"; weatherState = 2; }
+                    else if (code >= 1) { cond = "Cloudy"; weatherState = 1; }
+                    else { weatherState = 0; }
+                    document.getElementById("weather-display").innerText = `${temp}°C · ${cond}`;
+                    applySkyAndWeatherClasses();
+                }
+            } catch (err) {}
+        }
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                    const lat = pos.coords.latitude.toFixed(2);
+                    const lon = pos.coords.longitude.toFixed(2);
+                    currentLocLabel = `${lat}°N, ${lon}°E`;
+                    if (typeof pos.coords.heading === "number" && !Number.isNaN(pos.coords.heading)) {
+                        currentHeading = pos.coords.heading;
+                    }
+                    updateLocDirText();
+                    fetchDeviceWeather(pos.coords.latitude, pos.coords.longitude);
+                },
+                () => {
+                    currentLocLabel = "Nelamangala";
+                    updateLocDirText();
+                },
+                { timeout: 6000 }
+            );
+        }
+
+        document.getElementById("sky-viewport").addEventListener("click", () => {
+            weatherState = (weatherState + 1) % 3;
+            const labels = ["Clear", "Cloudy", "Rain"];
+            document.getElementById("weather-display").innerText = labels[weatherState];
+            applySkyAndWeatherClasses();
+        });
+
+        /* --- 8-SECOND AUTO REDIRECT TO PORTFOLIO --- */
+        let remainingSeconds = 8;
+        const timerTextEl = document.getElementById("timer-text");
+        const countdownInterval = setInterval(() => {
+            remainingSeconds--;
+            if (remainingSeconds > 0 && timerTextEl) {
+                timerTextEl.innerText = `LAUNCHING PORTFOLIO IN ${remainingSeconds}s`;
+            } else if (remainingSeconds <= 0) {
+                clearInterval(countdownInterval);
+                openPortfolio();
+            }
+        }, 1000);
+
+        function openPortfolio() {
+            if (isRedirecting) return;
+            isRedirecting = true;
+            clearInterval(countdownInterval);
+            window.location.href = "portfolio.html";
+        }
+
+        function toggleLauncherMenu() {
+            clearInterval(countdownInterval);
+            if (timerTextEl) timerTextEl.innerText = "AUTO-REDIRECT PAUSED";
+            const menu = document.getElementById("launcher-menu");
+            const icon = document.getElementById("orb-icon");
+            menu.classList.toggle("open");
+            icon.style.transform = menu.classList.contains("open") ? "rotate(90deg)" : "rotate(0deg)";
+        }
+
+        function toggleStoreSubdrawer() {
+            const sub = document.getElementById("store-subdrawer");
+            const arr = document.getElementById("store-arrow");
+            sub.classList.toggle("active");
+            arr.innerText = sub.classList.contains("active") ? "▲" : "▼";
+        }
+
+        function launchSite(url) {
+            if (url.startsWith("http")) window.open(url, "_blank", "noopener,noreferrer");
+            else window.location.href = url;
+        }
+
+        function openAuth() {
+            clearInterval(countdownInterval);
+            document.getElementById("auth-modal").style.display = "flex";
+            document.getElementById("launcher-menu").classList.remove("open");
+            document.getElementById("gate-pass").focus();
+        }
+
+        function closeAuth() {
+            document.getElementById("auth-modal").style.display = "none";
+            document.getElementById("auth-error").style.display = "none";
+        }
+
+        function validatePass() {
+            const pass = document.getElementById("gate-pass").value;
+            if (pass === "Jinufolio@2026" || pass === "2026") {
+                window.location.href = "dashboard.html";
             } else {
-                window.location.href = targetUrl;
+                document.getElementById("auth-error").style.display = "block";
             }
         }
     </script>
