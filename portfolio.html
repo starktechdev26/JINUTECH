@@ -3,26 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jaya Kumar (Jack) — Creative Developer &amp; Systems Architect</title>
+    <title>Jaya Kumar (Jack) — Systems, Security &amp; Analytics</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Syne:wght@700;800&family=JetBrains+Mono:wght@500;700&family=Caveat:wght@600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@600;700&family=JetBrains+Mono:wght@500;700&family=Caveat:wght@600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         :root {
-            --bg-void: #060709;
-            --bg-surface: #0e1117;
-            --bg-card: rgba(18, 22, 31, 0.85);
-            --neon-orange: #ff551f;
-            --neon-amber: #ff9100;
-            --neon-cyan: #00f3ff;
-            --neon-green: #00ffaa;
+            --bg-void: #050608;
+            --bg-surface: #0b0e14;
+            --bg-card: rgba(14, 18, 26, 0.9);
+            --sunset-hot: #ff4d15;
+            --sunset-warm: #ff7e29;
+            --sunset-amber: #ffaa2b;
+            --neon-cyan: #00e5ff;
+            --neon-green: #00ff9d;
             --text-pure: #ffffff;
-            --text-secondary: #9aa3b2;
-            --text-muted: #5a6474;
+            --text-secondary: #94a0b3;
+            --text-muted: #535d6e;
             --border: rgba(255, 255, 255, 0.08);
-            --border-glow: rgba(255, 85, 31, 0.4);
-            --font-display: 'Syne', sans-serif;
+            --border-glow: rgba(255, 77, 21, 0.45);
+            --font-display: 'Space Grotesk', sans-serif;
             --font-body: 'Plus Jakarta Sans', sans-serif;
             --font-mono: 'JetBrains Mono', monospace;
             --font-script: 'Caveat', cursive;
@@ -46,8 +47,8 @@
             line-height: 1.5;
             overflow-x: hidden;
             background-image: 
-                radial-gradient(circle at 10% 10%, rgba(255, 85, 31, 0.08), transparent 45%),
-                radial-gradient(circle at 90% 40%, rgba(0, 243, 255, 0.05), transparent 50%);
+                radial-gradient(circle at 10% 8%, rgba(255, 77, 21, 0.12) 0%, transparent 40%),
+                radial-gradient(circle at 90% 30%, rgba(0, 229, 255, 0.06) 0%, transparent 45%);
         }
 
         a {
@@ -55,16 +56,15 @@
             text-decoration: none;
         }
 
-        /* Ambient Lighting */
         .ambient-glow {
             position: fixed;
-            top: -150px;
+            top: -120px;
             left: 50%;
             transform: translateX(-50%);
-            width: min(100vw, 900px);
-            height: 480px;
-            background: radial-gradient(circle, rgba(255, 85, 31, 0.22) 0%, rgba(255, 145, 0, 0.08) 45%, transparent 75%);
-            filter: blur(80px);
+            width: min(100vw, 960px);
+            height: 420px;
+            background: radial-gradient(circle, rgba(255, 77, 21, 0.25) 0%, rgba(255, 126, 41, 0.08) 50%, transparent 75%);
+            filter: blur(90px);
             z-index: 0;
             pointer-events: none;
         }
@@ -74,28 +74,28 @@
             z-index: 1;
             max-width: 1220px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 0 16px;
         }
 
-        /* --- SUNSET STAGE HERO --- */
+        /* --- VISUAL STAGE HERO --- */
         .stage-wrapper {
-            margin: 16px auto 40px;
+            margin: 14px auto 36px;
         }
 
         .hero-banner {
             position: relative;
-            background: radial-gradient(circle at 50% 0%, #ff5e28 0%, #bd3307 36%, #4a1005 72%, #140503 94%, #0e1117 100%);
-            border-radius: 36px;
-            padding: 26px 32px 46px;
+            background: radial-gradient(circle at 50% 0%, #ff521a 0%, #b82b00 38%, #470d00 74%, #120300 95%, #080a0e 100%);
+            border-radius: 28px;
+            padding: 22px 24px 34px;
             overflow: hidden;
-            border: 1px solid rgba(255, 120, 50, 0.35);
-            box-shadow: 0 25px 70px rgba(189, 51, 7, 0.28), inset 0 0 40px rgba(255, 94, 40, 0.15);
+            border: 1px solid rgba(255, 126, 41, 0.35);
+            box-shadow: 0 25px 70px rgba(184, 43, 0, 0.28), inset 0 0 35px rgba(255, 82, 26, 0.2);
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 600px) {
             .hero-banner {
-                padding: 20px 20px 36px;
-                border-radius: 24px;
+                padding: 18px 16px 28px;
+                border-radius: 22px;
             }
         }
 
@@ -110,7 +110,7 @@
         .brand-badge {
             font-family: var(--font-display);
             font-size: 1.15rem;
-            font-weight: 800;
+            font-weight: 700;
             letter-spacing: 1.5px;
             color: #fff;
             display: flex;
@@ -128,8 +128,8 @@
 
         .nav-links {
             display: flex;
-            gap: 24px;
-            font-size: 0.88rem;
+            gap: 22px;
+            font-size: 0.85rem;
             font-weight: 600;
             color: rgba(255, 255, 255, 0.85);
         }
@@ -139,168 +139,264 @@
         .btn-deck-trigger {
             background: #ffffff;
             color: #0b0d11;
-            font-size: 0.82rem;
+            font-size: 0.78rem;
             font-weight: 800;
-            padding: 10px 18px;
+            padding: 9px 16px;
             border-radius: 999px;
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            transition: all 0.25s ease;
-            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25);
+            gap: 6px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+            white-space: nowrap;
         }
 
-        .btn-deck-trigger:hover, .btn-deck-trigger:active {
+        .btn-deck-trigger:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(255, 255, 255, 0.35);
+            box-shadow: 0 6px 20px rgba(255, 255, 255, 0.35);
         }
 
         @media (max-width: 768px) {
             .nav-links { display: none; }
         }
 
-        /* Clean Headline Block */
-        .hero-headline-block {
-            margin-top: 50px;
+        /* Hero Split: Headline + Interactive 3D Phone Mockup */
+        .hero-split {
+            margin-top: 36px;
             display: grid;
-            grid-template-columns: 1.3fr 0.9fr;
+            grid-template-columns: 1.15fr 0.85fr;
             align-items: center;
-            gap: 32px;
+            gap: 24px;
         }
 
         @media (max-width: 900px) {
-            .hero-headline-block {
+            .hero-split {
                 grid-template-columns: 1fr;
-                margin-top: 36px;
-                text-align: left;
+                margin-top: 24px;
             }
         }
 
         .greeting-eyebrow {
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 700;
-            color: rgba(255, 255, 255, 0.92);
-            margin-bottom: 8px;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 6px;
             display: block;
         }
 
         .hero-big-name {
             font-family: var(--font-display);
-            font-size: clamp(3.2rem, 8vw, 6.2rem);
-            font-weight: 800;
-            line-height: 0.94;
-            letter-spacing: -0.04em;
+            font-size: clamp(2.5rem, 6.5vw, 4.4rem);
+            font-weight: 700;
+            line-height: 1.02;
+            letter-spacing: -0.02em;
             color: #ffffff;
-            margin-bottom: 18px;
-            text-shadow: 0 4px 25px rgba(0, 0, 0, 0.35);
+            margin-bottom: 14px;
+            word-break: normal;
         }
 
         .hero-big-name span { color: #ffe4d6; }
 
         .hero-lead-text {
-            font-size: 1rem;
-            color: rgba(255, 255, 255, 0.88);
-            line-height: 1.6;
-            max-width: 480px;
-        }
-
-        .editorial-side-panel {
-            background: rgba(0, 0, 0, 0.25);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 24px;
-            padding: 28px;
-            backdrop-filter: blur(14px);
-        }
-
-        .side-quote {
-            font-family: var(--font-display);
-            font-size: clamp(1.4rem, 2.8vw, 1.85rem);
-            font-weight: 800;
-            line-height: 1.25;
-            color: #ffffff;
-            margin-bottom: 12px;
-        }
-
-        .side-subtext {
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 0.88rem;
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.9);
             line-height: 1.55;
+            max-width: 460px;
             margin-bottom: 20px;
         }
 
-        .hero-telemetry-badge {
+        .hero-tag-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .hero-pill {
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            color: #fff;
+            background: rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            padding: 5px 11px;
+            border-radius: 999px;
             display: inline-flex;
             align-items: center;
-            gap: 10px;
-            font-family: var(--font-mono);
-            font-size: 0.76rem;
-            color: #fff;
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 6px 14px;
-            border-radius: 999px;
+            gap: 6px;
         }
 
-        .pulse-core {
-            width: 7px;
-            height: 7px;
+        .hero-pill .p-dot {
+            width: 6px;
+            height: 6px;
             border-radius: 50%;
             background: var(--neon-green);
-            box-shadow: 0 0 10px var(--neon-green);
-            animation: pulseDot 2s infinite ease-in-out;
+            box-shadow: 0 0 8px var(--neon-green);
         }
 
-        @keyframes pulseDot {
-            0%, 100% { opacity: 0.35; transform: scale(0.9); }
-            50% { opacity: 1; transform: scale(1.15); }
+        /* 3D Mobile Phone Artifact in Hero */
+        .hero-visual-col {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            perspective: 900px;
         }
 
+        .phone-mockup-frame {
+            position: relative;
+            width: 240px;
+            height: 380px;
+            background: #0d1118;
+            border-radius: 32px;
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 30px rgba(255, 77, 21, 0.3);
+            transform: rotateY(-12deg) rotateX(6deg);
+            transition: transform 0.4s ease;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .phone-mockup-frame:hover {
+            transform: rotateY(0deg) rotateX(0deg) scale(1.03);
+        }
+
+        .phone-notch-bar {
+            height: 22px;
+            background: #06080c;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .phone-cam-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #1a2230;
+            border: 1px solid rgba(0, 229, 255, 0.4);
+        }
+
+        .phone-screen-content {
+            flex: 1;
+            padding: 16px;
+            background: radial-gradient(circle at 50% 40%, #0e1522 0%, #06090e 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Mini Radar Sweep inside Phone Screen */
+        .mini-radar-circle {
+            position: relative;
+            width: 130px;
+            height: 130px;
+            margin: 6px auto;
+            border-radius: 50%;
+            border: 1px dashed rgba(0, 229, 255, 0.35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: inset 0 0 20px rgba(0, 229, 255, 0.1);
+        }
+
+        .mini-radar-circle::before {
+            content: '';
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 1px solid rgba(0, 229, 255, 0.2);
+        }
+
+        .mini-radar-sweep {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: conic-gradient(from 0deg, rgba(0, 229, 255, 0.45) 0deg, transparent 65deg, transparent 360deg);
+            animation: radarSpin 3s linear infinite;
+        }
+
+        @keyframes radarSpin {
+            to { transform: rotate(360deg); }
+        }
+
+        .radar-center-shield {
+            position: relative;
+            z-index: 2;
+            color: var(--sunset-hot);
+            font-size: 1.6rem;
+            filter: drop-shadow(0 0 10px var(--sunset-hot));
+        }
+
+        .phone-stat-row {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(0, 229, 255, 0.2);
+            border-radius: 10px;
+            padding: 8px 10px;
+            font-family: var(--font-mono);
+            font-size: 0.68rem;
+            display: flex;
+            justify-content: space-between;
+            color: #d2e4f7;
+        }
+
+        /* 4-Column Mobile-Safe Pillars Strip */
         .pillar-strip {
-            margin-top: 42px;
-            padding-top: 24px;
-            border-top: 1px solid rgba(255, 255, 255, 0.18);
+            margin-top: 28px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.16);
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 16px;
+            gap: 12px;
         }
 
         @media (max-width: 768px) {
             .pillar-strip {
                 grid-template-columns: repeat(2, 1fr);
-                gap: 20px;
+                gap: 14px;
             }
+        }
+
+        .pillar-card {
+            background: rgba(0, 0, 0, 0.22);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 12px;
+            padding: 10px 12px;
         }
 
         .pillar-idx {
             font-family: var(--font-mono);
-            font-size: 0.72rem;
-            color: rgba(255, 255, 255, 0.65);
-            margin-bottom: 4px;
+            font-size: 0.7rem;
+            color: var(--sunset-amber);
+            margin-bottom: 2px;
+            font-weight: 700;
         }
 
         .pillar-name {
-            font-size: 0.95rem;
+            font-size: 0.88rem;
             font-weight: 800;
             color: #ffffff;
-            letter-spacing: -0.01em;
+            white-space: normal;
+            word-wrap: break-word;
         }
 
-        /* --- STACK BAR --- */
+        /* --- STACK PILLS STRIP --- */
         .stack-bar {
-            margin: 28px 0 65px;
-            padding: 18px 24px;
+            margin: 22px 0 54px;
+            padding: 16px 20px;
             background: var(--bg-surface);
-            border-radius: 18px;
+            border-radius: 16px;
             border: 1px solid var(--border);
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
             align-items: center;
-            gap: 18px;
+            gap: 14px;
         }
 
         .stack-title {
-            font-size: 0.82rem;
+            font-size: 0.8rem;
             font-weight: 700;
             color: var(--text-secondary);
             text-transform: uppercase;
@@ -310,200 +406,366 @@
         .stack-pills {
             display: flex;
             flex-wrap: wrap;
-            gap: 14px;
+            gap: 10px;
         }
 
         .pill-tag {
             font-family: var(--font-mono);
-            font-size: 0.78rem;
+            font-size: 0.75rem;
             color: #fff;
             background: rgba(255, 255, 255, 0.04);
             border: 1px solid var(--border);
-            padding: 6px 12px;
+            padding: 5px 11px;
             border-radius: 8px;
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            transition: all 0.25s ease;
+            gap: 7px;
+            transition: all 0.2s ease;
         }
 
         .pill-tag:hover {
-            border-color: var(--neon-orange);
-            color: var(--neon-orange);
-            box-shadow: 0 0 14px rgba(255, 85, 31, 0.25);
+            border-color: var(--sunset-hot);
+            color: var(--sunset-hot);
             transform: translateY(-2px);
         }
 
-        /* --- SECTION HEADER SYSTEM --- */
-        .sec-head { margin-bottom: 32px; }
+        /* --- SECTION HEADERS --- */
+        .sec-head { margin-bottom: 24px; }
 
         .sec-tag {
             font-family: var(--font-mono);
-            font-size: 0.78rem;
+            font-size: 0.74rem;
             font-weight: 700;
             letter-spacing: 2px;
             text-transform: uppercase;
-            color: var(--neon-orange);
-            margin-bottom: 6px;
+            color: var(--sunset-hot);
+            margin-bottom: 4px;
             display: block;
         }
 
         .sec-title {
             font-family: var(--font-display);
-            font-size: clamp(1.9rem, 4vw, 2.9rem);
-            font-weight: 800;
+            font-size: clamp(1.8rem, 4vw, 2.6rem);
+            font-weight: 700;
             line-height: 1.1;
-            letter-spacing: -0.03em;
+            letter-spacing: -0.02em;
         }
 
-        /* --- NEON BUILDS GRID --- */
-        .builds-grid {
+        /* --- LIVE WORKING MANNER CARDS --- */
+        .live-labs-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
-            gap: 22px;
-            margin-bottom: 80px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 18px;
+            margin-bottom: 68px;
         }
 
-        .build-card {
+        .lab-card {
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 26px;
+            border-radius: 18px;
+            padding: 20px;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
-            gap: 18px;
+            gap: 14px;
             position: relative;
             overflow: hidden;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            cursor: pointer;
+            transition: all 0.3s ease;
         }
 
-        .build-card::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: 20px;
-            padding: 1px;
-            background: linear-gradient(135deg, rgba(255, 85, 31, 0.6), transparent 60%);
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            opacity: 0.35;
-            transition: opacity 0.3s ease;
-        }
-
-        .build-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6), 0 0 24px rgba(255, 85, 31, 0.22);
+        .lab-card:hover {
+            transform: translateY(-4px);
             border-color: var(--border-glow);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 77, 21, 0.18);
         }
 
-        .build-card:hover::before { opacity: 1; }
-
-        .card-badge-row {
+        .lab-top {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .card-cat-badge {
-            font-family: var(--font-mono);
-            font-size: 0.72rem;
-            letter-spacing: 1.5px;
-            color: var(--neon-orange);
-            background: rgba(255, 85, 31, 0.1);
-            border: 1px solid rgba(255, 85, 31, 0.3);
-            padding: 4px 10px;
-            border-radius: 999px;
-            text-transform: uppercase;
-        }
-
-        .card-icon {
-            font-size: 1.2rem;
-            color: var(--text-secondary);
-            transition: color 0.25s ease, transform 0.25s ease;
-        }
-
-        .build-card:hover .card-icon {
-            color: var(--neon-orange);
-            transform: translateX(4px);
-        }
-
-        .card-body h3 {
+        .lab-role {
             font-family: var(--font-display);
-            font-size: 1.45rem;
-            letter-spacing: -0.02em;
-            margin-bottom: 8px;
+            font-size: 1.1rem;
             color: #fff;
         }
 
-        .card-body p {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            line-height: 1.6;
+        .lab-pill {
+            font-family: var(--font-mono);
+            font-size: 0.68rem;
+            padding: 3px 8px;
+            border-radius: 999px;
+            border: 1px solid rgba(0, 229, 255, 0.35);
+            color: var(--neon-cyan);
+            background: rgba(0, 229, 255, 0.08);
         }
 
-        .tech-pill-row {
+        /* Analytics Canvas Visualizer */
+        .analytics-visual-box {
+            background: #070a10;
+            border: 1px solid rgba(0, 229, 255, 0.16);
+            border-radius: 12px;
+            padding: 12px;
+        }
+
+        .chart-bars-wrap {
+            display: flex;
+            align-items: flex-end;
+            gap: 7px;
+            height: 70px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .c-bar {
+            flex: 1;
+            border-radius: 3px 3px 0 0;
+            background: linear-gradient(180deg, var(--neon-cyan), rgba(0, 229, 255, 0.2));
+            animation: barDance 2.6s ease-in-out infinite;
+        }
+
+        .c-bar:nth-child(2) { animation-delay: 0.3s; background: linear-gradient(180deg, var(--sunset-amber), rgba(255, 170, 43, 0.2)); }
+        .c-bar:nth-child(3) { animation-delay: 0.6s; }
+        .c-bar:nth-child(4) { animation-delay: 0.2s; background: linear-gradient(180deg, var(--neon-green), rgba(0, 255, 157, 0.2)); }
+        .c-bar:nth-child(5) { animation-delay: 0.8s; }
+        .c-bar:nth-child(6) { animation-delay: 0.4s; background: linear-gradient(180deg, var(--sunset-hot), rgba(255, 77, 21, 0.2)); }
+
+        @keyframes barDance {
+            0%, 100% { height: 28%; opacity: 0.7; }
+            50% { height: 95%; opacity: 1; }
+        }
+
+        .analytics-subtext {
+            margin-top: 8px;
+            display: flex;
+            justify-content: space-between;
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--neon-green);
+        }
+
+        /* Security Radar & Scan Visualizer */
+        .sec-visual-box {
+            background: #070a10;
+            border: 1px solid rgba(255, 77, 21, 0.25);
+            border-radius: 12px;
+            padding: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sec-scan-line {
+            position: absolute;
+            top: 0;
+            left: -40%;
+            width: 40%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--sunset-hot), transparent);
+            box-shadow: 0 0 10px var(--sunset-hot);
+            animation: sweepScan 2.4s linear infinite;
+        }
+
+        @keyframes sweepScan {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(380%); }
+        }
+
+        .sec-log-stream {
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            color: #b0c2d8;
+            line-height: 1.5;
+        }
+
+        .sec-log-stream .ok { color: var(--neon-green); }
+        .sec-log-stream .warn { color: var(--sunset-amber); }
+
+        /* Software Engineer Pipeline Visualizer */
+        .eng-visual-box {
+            background: #070a10;
+            border: 1px solid rgba(0, 255, 157, 0.2);
+            border-radius: 12px;
+            padding: 12px;
+        }
+
+        .eng-code-stream {
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            color: #92b7de;
+            line-height: 1.5;
+            min-height: 58px;
+        }
+
+        .eng-pipe-track {
+            margin-top: 8px;
+            height: 5px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.08);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .eng-pipe-runner {
+            position: absolute;
+            top: 0;
+            left: -30%;
+            width: 30%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--sunset-hot), var(--neon-green));
+            animation: flowPipe 2s ease-in-out infinite;
+        }
+
+        @keyframes flowPipe {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(430%); }
+        }
+
+        .lab-desc {
+            font-size: 0.84rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* --- VISUAL SELECTED BUILDS (WITH SCHEMATIC PREVIEWS) --- */
+        .builds-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+            gap: 18px;
+            margin-bottom: 68px;
+        }
+
+        .build-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor: pointer;
+        }
+
+        .build-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--border-glow);
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 77, 21, 0.2);
+        }
+
+        /* Visual Interactive Banner inside each Build Card */
+        .build-card-graphic {
+            height: 140px;
+            background: radial-gradient(circle at 50% 50%, #151d2c 0%, #080c14 100%);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-graphic-icon {
+            font-size: 2.2rem;
+            color: var(--sunset-hot);
+            filter: drop-shadow(0 0 14px rgba(255, 77, 21, 0.5));
+            transition: transform 0.3s ease;
+        }
+
+        .build-card:hover .card-graphic-icon {
+            transform: scale(1.12);
+        }
+
+        .card-graphic-tag {
+            font-family: var(--font-mono);
+            font-size: 0.68rem;
+            letter-spacing: 1px;
+            color: var(--neon-cyan);
+            margin-top: 8px;
+            background: rgba(0, 229, 255, 0.1);
+            border: 1px solid rgba(0, 229, 255, 0.25);
+            padding: 3px 8px;
+            border-radius: 999px;
+        }
+
+        .build-card-content {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            flex: 1;
+            justify-content: space-between;
+        }
+
+        .build-card-content h3 {
+            font-family: var(--font-display);
+            font-size: 1.35rem;
+            color: #fff;
+        }
+
+        .build-card-content p {
+            color: var(--text-secondary);
+            font-size: 0.88rem;
+            line-height: 1.5;
+        }
+
+        .build-pill-row {
             display: flex;
             flex-wrap: wrap;
             gap: 6px;
         }
 
-        .tech-pill {
+        .build-pill {
             font-family: var(--font-mono);
-            font-size: 0.72rem;
+            font-size: 0.7rem;
             color: var(--text-muted);
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(255, 255, 255, 0.04);
             border: 1px solid var(--border);
-            padding: 3px 8px;
+            padding: 3px 7px;
             border-radius: 6px;
         }
 
-        /* --- ARTIFACTS GALLERY --- */
+        /* --- VISUAL ARTIFACTS GALLERY --- */
         .gallery-controls {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 24px;
+            gap: 8px;
+            margin-bottom: 20px;
         }
 
         .gallery-filter-btn {
             background: var(--bg-surface);
             border: 1px solid var(--border);
             color: var(--text-secondary);
-            padding: 8px 16px;
+            padding: 7px 14px;
             border-radius: 999px;
             font-family: var(--font-mono);
-            font-size: 0.78rem;
+            font-size: 0.74rem;
             cursor: pointer;
-            transition: all 0.25s ease;
+            transition: all 0.2s ease;
         }
 
         .gallery-filter-btn.active, .gallery-filter-btn:hover {
-            background: var(--neon-orange);
-            border-color: var(--neon-orange);
+            background: var(--sunset-hot);
+            border-color: var(--sunset-hot);
             color: #fff;
-            box-shadow: 0 0 16px rgba(255, 85, 31, 0.35);
+            box-shadow: 0 0 14px rgba(255, 77, 21, 0.35);
         }
 
         .gallery-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 18px;
-            margin-bottom: 80px;
+            gap: 16px;
+            margin-bottom: 68px;
         }
 
         .gallery-item {
             background: var(--bg-surface);
             border: 1px solid var(--border);
             border-radius: 16px;
-            padding: 20px;
+            overflow: hidden;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
-            gap: 14px;
-            transition: all 0.3s ease;
+            transition: all 0.25s ease;
         }
 
         .gallery-item.hidden { display: none; }
@@ -511,53 +773,74 @@
         .gallery-item:hover {
             border-color: var(--neon-cyan);
             transform: translateY(-4px);
-            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 243, 255, 0.15);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 229, 255, 0.15);
         }
 
-        .gallery-visual-mock {
-            height: 120px;
-            border-radius: 10px;
-            background: linear-gradient(145deg, #121824, #080b10);
-            border: 1px solid rgba(0, 243, 255, 0.2);
+        /* Live Canvas Visual Header for each Artifact */
+        .artifact-preview-canvas {
+            height: 110px;
+            background: linear-gradient(135deg, #0d1420 0%, #05080e 100%);
+            border-bottom: 1px solid var(--border);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            font-family: var(--font-mono);
-            font-size: 0.82rem;
-            color: var(--neon-cyan);
-            gap: 8px;
+            position: relative;
+            gap: 6px;
         }
 
-        .gallery-item h4 {
+        .artifact-canvas-glow-icon {
+            font-size: 1.8rem;
+            color: var(--neon-cyan);
+            filter: drop-shadow(0 0 8px rgba(0, 229, 255, 0.6));
+        }
+
+        .artifact-meta-strip {
+            font-family: var(--font-mono);
+            font-size: 0.68rem;
+            color: #a0bedc;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 2px 8px;
+            border-radius: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .artifact-details {
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .artifact-details h4 {
             font-family: var(--font-display);
             font-size: 1.05rem;
             color: #fff;
         }
 
-        .gallery-item p {
+        .artifact-details p {
             color: var(--text-secondary);
             font-size: 0.82rem;
-            line-height: 1.5;
+            line-height: 1.45;
         }
 
-        /* --- EDUCATION, WORKFLOW & SIGNATURE --- */
+        /* --- EDUCATION, WORKFLOW & MANIFESTO --- */
         .editorial-trio {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
-            gap: 22px;
-            margin-bottom: 80px;
+            gap: 18px;
+            margin-bottom: 68px;
         }
 
-        @media (max-width: 960px) {
+        @media (max-width: 900px) {
             .editorial-trio { grid-template-columns: 1fr; }
         }
 
         .trio-card {
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 28px;
+            border-radius: 18px;
+            padding: 24px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -565,19 +848,19 @@
 
         .trio-label {
             font-family: var(--font-mono);
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             letter-spacing: 2px;
             text-transform: uppercase;
             color: var(--text-pure);
-            margin-bottom: 20px;
+            margin-bottom: 18px;
             display: block;
         }
 
         .timeline-list {
             display: flex;
             flex-direction: column;
-            gap: 18px;
-            margin-bottom: 22px;
+            gap: 16px;
+            margin-bottom: 20px;
         }
 
         .timeline-row {
@@ -585,49 +868,49 @@
             justify-content: space-between;
             align-items: baseline;
             border-bottom: 1px solid var(--border);
-            padding-bottom: 10px;
-            gap: 12px;
+            padding-bottom: 8px;
+            gap: 10px;
         }
 
         .timeline-row strong {
             display: block;
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             color: #fff;
         }
 
         .timeline-row span {
-            font-size: 0.78rem;
+            font-size: 0.76rem;
             color: var(--text-secondary);
         }
 
         .timeline-row small {
             font-family: var(--font-mono);
-            font-size: 0.74rem;
-            color: var(--neon-amber);
+            font-size: 0.72rem;
+            color: var(--sunset-amber);
             white-space: nowrap;
         }
 
         .workflow-col {
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 14px;
         }
 
         .wf-node {
             display: flex;
-            gap: 14px;
+            gap: 12px;
             align-items: flex-start;
         }
 
         .wf-num {
-            width: 28px;
-            height: 28px;
+            width: 26px;
+            height: 26px;
             border-radius: 50%;
-            background: rgba(255, 85, 31, 0.12);
+            background: rgba(255, 77, 21, 0.12);
             border: 1px solid var(--border-glow);
-            color: var(--neon-orange);
+            color: var(--sunset-hot);
             font-family: var(--font-mono);
-            font-size: 0.74rem;
+            font-size: 0.72rem;
             font-weight: 700;
             display: flex;
             align-items: center;
@@ -638,44 +921,44 @@
         .wf-copy strong {
             display: block;
             font-family: var(--font-mono);
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             text-transform: uppercase;
-            color: var(--neon-orange);
+            color: var(--sunset-hot);
             margin-bottom: 2px;
         }
 
         .wf-copy p {
-            font-size: 0.78rem;
+            font-size: 0.76rem;
             color: var(--text-secondary);
-            line-height: 1.45;
+            line-height: 1.4;
         }
 
         .manifesto-box {
-            background: linear-gradient(145deg, #ff551f, #c73200);
+            background: linear-gradient(145deg, #ff4d15, #b82b00);
             border: 1px solid rgba(255, 255, 255, 0.2);
             color: #ffffff;
-            box-shadow: 0 16px 45px rgba(255, 85, 31, 0.35);
+            box-shadow: 0 16px 45px rgba(255, 77, 21, 0.35);
         }
 
         .quote-glyph {
-            font-size: 2.4rem;
+            font-size: 2.2rem;
             opacity: 0.45;
             line-height: 1;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
 
         .manifesto-text {
-            font-size: 1.25rem;
+            font-size: 1.15rem;
             font-weight: 800;
             line-height: 1.4;
-            margin-bottom: 22px;
+            margin-bottom: 20px;
         }
 
         .signature-text {
             font-family: var(--font-script);
-            font-size: 2.8rem;
+            font-size: 2.6rem;
             line-height: 1;
-            margin-bottom: 20px;
+            margin-bottom: 18px;
         }
 
         .deck-shortcut-btn {
@@ -683,83 +966,83 @@
             justify-content: space-between;
             align-items: center;
             font-family: var(--font-mono);
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             font-weight: 700;
             letter-spacing: 1px;
             text-transform: uppercase;
             border-top: 1px solid rgba(255, 255, 255, 0.3);
-            padding-top: 14px;
+            padding-top: 12px;
         }
 
         /* --- CONTACT DOCK --- */
         .contact-dock {
             background: var(--bg-surface);
             border: 1px solid var(--border);
-            border-radius: 24px;
-            padding: 42px 36px;
+            border-radius: 22px;
+            padding: 36px 28px;
             display: grid;
-            grid-template-columns: 1.2fr 0.8fr;
-            gap: 36px;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 28px;
             align-items: center;
-            margin-bottom: 60px;
+            margin-bottom: 50px;
         }
 
         @media (max-width: 800px) {
             .contact-dock {
                 grid-template-columns: 1fr;
-                padding: 28px 22px;
+                padding: 24px 18px;
             }
         }
 
         .contact-dock h2 {
             font-family: var(--font-display);
-            font-size: clamp(2.2rem, 4.5vw, 3.2rem);
-            font-weight: 800;
-            line-height: 1;
-            margin-bottom: 12px;
+            font-size: clamp(2rem, 4vw, 2.8rem);
+            font-weight: 700;
+            line-height: 1.05;
+            margin-bottom: 10px;
         }
 
-        .contact-dock h2 span { color: var(--neon-orange); }
+        .contact-dock h2 span { color: var(--sunset-hot); }
 
         .contact-links {
             display: flex;
             flex-direction: column;
-            gap: 14px;
+            gap: 12px;
         }
 
         .contact-row-link {
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 12px;
             font-family: var(--font-mono);
-            font-size: 0.88rem;
+            font-size: 0.84rem;
             color: #fff;
             transition: color 0.2s ease;
         }
 
         .contact-row-link i {
-            color: var(--neon-orange);
-            font-size: 1.15rem;
-            width: 22px;
+            color: var(--sunset-hot);
+            font-size: 1.1rem;
+            width: 20px;
         }
 
-        .contact-row-link:hover { color: var(--neon-amber); }
+        .contact-row-link:hover { color: var(--sunset-amber); }
 
         footer {
             border-top: 1px solid var(--border);
-            padding: 26px 0 38px;
+            padding: 22px 0 34px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             font-family: var(--font-mono);
-            font-size: 0.78rem;
+            font-size: 0.75rem;
             color: var(--text-muted);
         }
 
         @media (max-width: 600px) {
             footer {
                 flex-direction: column;
-                gap: 12px;
+                gap: 10px;
                 text-align: center;
             }
         }
@@ -771,7 +1054,7 @@
 
     <div class="container">
 
-        <!-- STAGE HERO -->
+        <!-- --- SUNSET HERO STAGE (WITH 3D MOBILE ARTIFACT) --- -->
         <div class="stage-wrapper">
             <section class="hero-banner">
                 <header class="header-bar">
@@ -779,9 +1062,9 @@
                         <span class="dot"></span> JINUTECH
                     </a>
                     <nav class="nav-links">
+                        <a href="#live-work">Live Systems</a>
                         <a href="#builds">Builds</a>
                         <a href="#gallery">Gallery</a>
-                        <a href="#about">Experience</a>
                         <a href="#contact">Contact</a>
                     </nav>
                     <a href="index.html" class="btn-deck-trigger">
@@ -789,7 +1072,8 @@
                     </a>
                 </header>
 
-                <div class="hero-headline-block">
+                <div class="hero-split">
+                    <!-- Text Info Column -->
                     <div>
                         <span class="greeting-eyebrow">Hey, I'm</span>
                         <h1 class="hero-big-name">
@@ -797,59 +1081,151 @@
                             <span>Kumar</span>
                         </h1>
                         <p class="hero-lead-text">
-                            Software &amp; Python developer based in Nelamangala, Bengaluru. Focused on local-first data systems, mobile safety engines, and resilient web engineering.
+                            Software engineer, data analyst &amp; security-minded builder based in Nelamangala, Bengaluru. Crafting local-first software, real-time analytics, and resilient mobile tools.
                         </p>
+                        <div class="hero-tag-pills">
+                            <span class="hero-pill"><span class="p-dot"></span> BENGALURU NODE // LIVE</span>
+                            <span class="hero-pill"><i class="fas fa-shield-halved"></i> LOCAL-FIRST DEFENSE</span>
+                        </div>
                     </div>
 
-                    <div class="editorial-side-panel">
-                        <div class="side-quote">
-                            Great systems feel effortless.
-                        </div>
-                        <p class="side-subtext">
-                            Zero-cloud mobile execution, local SQLite storage, and clean automated architectures designed to stay dependable under load.
-                        </p>
-                        <div class="hero-telemetry-badge">
-                            <span class="pulse-core"></span>
-                            <span>BENGALURU GRID // ONLINE</span>
+                    <!-- 3D Mobile Artifact Frame -->
+                    <div class="hero-visual-col">
+                        <div class="phone-mockup-frame">
+                            <div class="phone-notch-bar">
+                                <div class="phone-cam-dot"></div>
+                            </div>
+                            <div class="phone-screen-content">
+                                <div style="display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 0.64rem; color: var(--neon-cyan);">
+                                    <span>RAKSHA-CORE</span>
+                                    <span>v2.6 [OK]</span>
+                                </div>
+
+                                <div class="mini-radar-circle">
+                                    <div class="mini-radar-sweep"></div>
+                                    <i class="fas fa-shield-halved radar-center-shield"></i>
+                                </div>
+
+                                <div class="phone-stat-row">
+                                    <span>RADAR: ACTIVE</span>
+                                    <span style="color: var(--neon-green);">0 LEAKS</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
+                <!-- 4 Mobile-Safe Pillar Boxes -->
                 <div class="pillar-strip">
-                    <div>
+                    <div class="pillar-card">
                         <div class="pillar-idx">#01</div>
-                        <div class="pillar-name">Python Backend</div>
+                        <div class="pillar-name">Data Analytics</div>
                     </div>
-                    <div>
+                    <div class="pillar-card">
                         <div class="pillar-idx">#02</div>
-                        <div class="pillar-name">Mobile Security</div>
+                        <div class="pillar-name">Ethical Security</div>
                     </div>
-                    <div>
+                    <div class="pillar-card">
                         <div class="pillar-idx">#03</div>
-                        <div class="pillar-name">Web Architecture</div>
+                        <div class="pillar-name">Software Eng</div>
                     </div>
-                    <div>
+                    <div class="pillar-card">
                         <div class="pillar-idx">#04</div>
-                        <div class="pillar-name">Local Voice AI</div>
+                        <div class="pillar-name">Local AI</div>
                     </div>
                 </div>
             </section>
+        </div>
 
-            <!-- Stack Bar -->
-            <div class="stack-bar">
-                <span class="stack-title">Core Development Stack</span>
-                <div class="stack-pills">
-                    <span class="pill-tag"><i class="fab fa-python"></i> Python</span>
-                    <span class="pill-tag"><i class="fab fa-android"></i> Android</span>
-                    <span class="pill-tag"><i class="fab fa-js"></i> JavaScript</span>
-                    <span class="pill-tag"><i class="fas fa-database"></i> SQLite / MySQL</span>
-                    <span class="pill-tag"><i class="fab fa-github"></i> Git / GitHub</span>
-                    <span class="pill-tag"><i class="fab fa-html5"></i> HTML5 / CSS3</span>
-                </div>
+        <!-- STACK BAR -->
+        <div class="stack-bar">
+            <span class="stack-title">Production Stack</span>
+            <div class="stack-pills">
+                <span class="pill-tag"><i class="fab fa-python"></i> Python</span>
+                <span class="pill-tag"><i class="fab fa-android"></i> Android</span>
+                <span class="pill-tag"><i class="fas fa-database"></i> SQL / SQLite</span>
+                <span class="pill-tag"><i class="fab fa-js"></i> JavaScript</span>
+                <span class="pill-tag"><i class="fab fa-github"></i> Git / GitHub</span>
+                <span class="pill-tag"><i class="fab fa-html5"></i> HTML5 / CSS3</span>
             </div>
         </div>
 
-        <!-- SELECTED BUILDS (NEON FLEX CARDS) -->
+        <!-- --- LIVE WORKING MANNER SECTION --- -->
+        <section id="live-work">
+            <div class="sec-head">
+                <span class="sec-tag">// LIVE WORKING MANNER</span>
+                <h2 class="sec-title">How I Operate in Real Time</h2>
+            </div>
+
+            <div class="live-labs-grid">
+                <!-- 1. Data Analytics -->
+                <article class="lab-card">
+                    <div class="lab-top">
+                        <h3 class="lab-role">Data Analytics</h3>
+                        <span class="lab-pill">STREAMING</span>
+                    </div>
+                    <div class="analytics-visual-box">
+                        <div class="chart-bars-wrap" aria-hidden="true">
+                            <div class="c-bar"></div>
+                            <div class="c-bar"></div>
+                            <div class="c-bar"></div>
+                            <div class="c-bar"></div>
+                            <div class="c-bar"></div>
+                            <div class="c-bar"></div>
+                        </div>
+                        <div class="analytics-subtext">
+                            <span>QUERY: SQL / PANDAS</span>
+                            <span id="metric-counter">98.4% CLEAN</span>
+                        </div>
+                    </div>
+                    <p class="lab-desc">
+                        Cleaning datasets, spotting telemetry anomalies, and turning SQL &amp; Python queries into clear metrics and visual dashboards.
+                    </p>
+                </article>
+
+                <!-- 2. Ethical Security -->
+                <article class="lab-card">
+                    <div class="lab-top">
+                        <h3 class="lab-role">Ethical Security</h3>
+                        <span class="lab-pill">DEFENSIVE AUDIT</span>
+                    </div>
+                    <div class="sec-visual-box">
+                        <div class="sec-scan-line" aria-hidden="true"></div>
+                        <div class="sec-log-stream" id="sec-feed">
+                            <div>&gt; Checking auth boundaries... <span class="ok">[HARDENED]</span></div>
+                            <div>&gt; Inspecting local storage... <span class="ok">[ZERO-TRACK]</span></div>
+                            <div>&gt; Validating input schema... <span class="warn">[VERIFIED]</span></div>
+                        </div>
+                    </div>
+                    <p class="lab-desc">
+                        Defensive security mindset: least privilege, zero unnecessary cloud exposure, and air-gapped data custody.
+                    </p>
+                </article>
+
+                <!-- 3. Software Engineering -->
+                <article class="lab-card">
+                    <div class="lab-top">
+                        <h3 class="lab-role">Software Engineering</h3>
+                        <span class="lab-pill">CI / BUILD</span>
+                    </div>
+                    <div class="eng-visual-box">
+                        <div class="eng-code-stream" id="code-feed">
+                            <div>&gt; target: mobile + web responsive</div>
+                            <div>&gt; engine: modular · testable · fast</div>
+                            <div>&gt; status: 0-latency pass</div>
+                        </div>
+                        <div class="eng-pipe-track" aria-hidden="true">
+                            <div class="eng-pipe-runner"></div>
+                        </div>
+                    </div>
+                    <p class="lab-desc">
+                        Writing modular, maintainable Python, web, and native Android code with fast feedback loops and error handling.
+                    </p>
+                </article>
+            </div>
+        </section>
+
+        <!-- --- SELECTED BUILDS (WITH VISUAL PREVIEWS) --- -->
         <section id="builds">
             <div class="sec-head">
                 <span class="sec-tag">// OPERATIONAL CORE</span>
@@ -857,57 +1233,66 @@
             </div>
 
             <div class="builds-grid">
+                <!-- Build 1: Raksha-Suraksha -->
                 <article class="build-card" onclick="handleCardNav('https://jayakumar-2004.github.io/Sentinel-Web-Command/')">
-                    <div class="card-badge-row">
-                        <span class="card-cat-badge">Mobile Safety</span>
-                        <i class="fas fa-shield-halved card-icon"></i>
+                    <div class="build-card-graphic">
+                        <i class="fas fa-shield-halved card-graphic-icon"></i>
+                        <span class="card-graphic-tag">ANDROID SAFETY ENGINE</span>
                     </div>
-                    <div class="card-body">
-                        <h3>Raksha-Suraksha</h3>
-                        <p>Personal safety and anti-theft mobile architecture with silent SMS SOS routing, remote lock triggers, and offline geolocation radar.</p>
-                    </div>
-                    <div class="tech-pill-row">
-                        <span class="tech-pill">Android</span>
-                        <span class="tech-pill">Java</span>
-                        <span class="tech-pill">Offline Maps</span>
+                    <div class="build-card-content">
+                        <div>
+                            <h3>Raksha-Suraksha</h3>
+                            <p>Personal safety and anti-theft mobile architecture with silent SMS SOS routing, remote lock triggers, and offline geolocation radar.</p>
+                        </div>
+                        <div class="build-pill-row">
+                            <span class="build-pill">Android</span>
+                            <span class="build-pill">Java</span>
+                            <span class="build-pill">Offline Maps</span>
+                        </div>
                     </div>
                 </article>
 
+                <!-- Build 2: J.A.R.V.I.S. / Leo -->
                 <article class="build-card" onclick="handleCardNav('#about')">
-                    <div class="card-badge-row">
-                        <span class="card-cat-badge">Voice Intelligence</span>
-                        <i class="fas fa-microphone-lines card-icon"></i>
+                    <div class="build-card-graphic">
+                        <i class="fas fa-microphone-lines card-graphic-icon" style="color: var(--neon-cyan); filter: drop-shadow(0 0 14px rgba(0,229,255,0.5));"></i>
+                        <span class="card-graphic-tag" style="border-color: rgba(0,229,255,0.3); color: var(--neon-cyan);">OFFLINE SPEECH AI</span>
                     </div>
-                    <div class="card-body">
-                        <h3>J.A.R.V.I.S. / Leo</h3>
-                        <p>Fully offline desktop and mobile voice engine built using Vosk speech models, local Python intent handlers, and real-time TTS synthesis.</p>
-                    </div>
-                    <div class="tech-pill-row">
-                        <span class="tech-pill">Python</span>
-                        <span class="tech-pill">Vosk</span>
-                        <span class="tech-pill">Offline LLM</span>
+                    <div class="build-card-content">
+                        <div>
+                            <h3>J.A.R.V.I.S. / Leo</h3>
+                            <p>Fully offline desktop and mobile voice engine built using Vosk speech models, local Python intent handlers, and real-time TTS synthesis.</p>
+                        </div>
+                        <div class="build-pill-row">
+                            <span class="build-pill">Python</span>
+                            <span class="build-pill">Vosk</span>
+                            <span class="build-pill">Automation</span>
+                        </div>
                     </div>
                 </article>
 
+                <!-- Build 3: JINUTECH Deck -->
                 <article class="build-card" onclick="handleCardNav('index.html')">
-                    <div class="card-badge-row">
-                        <span class="card-cat-badge">Atmospheric Hub</span>
-                        <i class="fas fa-cloud-sun card-icon"></i>
+                    <div class="build-card-graphic">
+                        <i class="fas fa-cloud-sun card-graphic-icon" style="color: var(--sunset-amber); filter: drop-shadow(0 0 14px rgba(255,170,43,0.5));"></i>
+                        <span class="card-graphic-tag" style="border-color: rgba(255,170,43,0.3); color: var(--sunset-amber);">ENVIRONMENT ENGINE</span>
                     </div>
-                    <div class="card-body">
-                        <h3>JINUTECH Deck</h3>
-                        <p>Time-synchronized cyber-physical environment engine featuring live local sun/moon elevation, procedural clouds, and three-option launch routing.</p>
-                    </div>
-                    <div class="tech-pill-row">
-                        <span class="tech-pill">HTML5</span>
-                        <span class="tech-pill">CSS Shaders</span>
-                        <span class="tech-pill">Geolocation</span>
+                    <div class="build-card-content">
+                        <div>
+                            <h3>JINUTECH Deck</h3>
+                            <p>Time-synchronized cyber-physical environment engine featuring live local sun/moon elevation, procedural clouds, and three-option launch routing.</p>
+                        </div>
+                        <div class="build-pill-row">
+                            <span class="build-pill">HTML5 Canvas</span>
+                            <span class="build-pill">CSS Shaders</span>
+                            <span class="build-pill">Geolocation</span>
+                        </div>
                     </div>
                 </article>
             </div>
         </section>
 
-        <!-- ARTIFACTS GALLERY -->
+        <!-- --- ARTIFACTS GALLERY --- -->
         <section id="gallery">
             <div class="sec-head">
                 <span class="sec-tag">// ARTIFACTS &amp; LABS</span>
@@ -916,64 +1301,68 @@
 
             <div class="gallery-controls">
                 <button class="gallery-filter-btn active" onclick="filterGallery('all', this)">All Artifacts</button>
-                <button class="gallery-filter-btn" onclick="filterGallery('mobile', this)">Mobile &amp; Security</button>
-                <button class="gallery-filter-btn" onclick="filterGallery('python', this)">Python &amp; AI</button>
-                <button class="gallery-filter-btn" onclick="filterGallery('web', this)">Web &amp; Cloud</button>
+                <button class="gallery-filter-btn" onclick="filterGallery('analytics', this)">Data Analytics</button>
+                <button class="gallery-filter-btn" onclick="filterGallery('security', this)">Ethical Security</button>
+                <button class="gallery-filter-btn" onclick="filterGallery('engineering', this)">Software Eng</button>
             </div>
 
-            <div class="gallery-grid" id="gallery-grid">
-                <div class="gallery-item" data-category="mobile">
-                    <div class="gallery-visual-mock">
-                        <i class="fas fa-mobile-screen-button fa-2x"></i>
-                        <span>ANDROID APK CORE</span>
+            <div class="gallery-grid">
+                <!-- Gallery 1 -->
+                <div class="gallery-item" data-category="analytics">
+                    <div class="artifact-preview-canvas">
+                        <i class="fas fa-chart-column artifact-canvas-glow-icon"></i>
+                        <span class="artifact-meta-strip">SQL &amp; PANDAS PIPELINE</span>
                     </div>
-                    <div>
-                        <h4>Raksha Anti-Theft Sentinel</h4>
-                        <p>Offline device security and silent emergency beacon system.</p>
-                    </div>
-                </div>
-
-                <div class="gallery-item" data-category="python">
-                    <div class="gallery-visual-mock">
-                        <i class="fas fa-wave-square fa-2x"></i>
-                        <span>VOSK RECOGNIZER</span>
-                    </div>
-                    <div>
-                        <h4>Leo Offline Voice Agent</h4>
-                        <p>Zero-cloud voice assistant running directly on localized hardware.</p>
+                    <div class="artifact-details">
+                        <h4>Telemetry Trend Analyzer</h4>
+                        <p>Structured query reporting, aggregation scripts, and visual summary distribution metrics.</p>
                     </div>
                 </div>
 
-                <div class="gallery-item" data-category="web">
-                    <div class="gallery-visual-mock">
-                        <i class="fas fa-network-wired fa-2x"></i>
-                        <span>WEB COMMAND PORTAL</span>
+                <!-- Gallery 2 -->
+                <div class="gallery-item" data-category="security">
+                    <div class="artifact-preview-canvas">
+                        <i class="fas fa-user-shield artifact-canvas-glow-icon" style="color: var(--sunset-hot); filter: drop-shadow(0 0 8px rgba(255,77,21,0.6));"></i>
+                        <span class="artifact-meta-strip">AUDIT &amp; HARDENING</span>
                     </div>
-                    <div>
+                    <div class="artifact-details">
+                        <h4>Titanium Shield Guard</h4>
+                        <p>Local-only SQLite storage, minimal permissions, and defensive configuration checks.</p>
+                    </div>
+                </div>
+
+                <!-- Gallery 3 -->
+                <div class="gallery-item" data-category="engineering">
+                    <div class="artifact-preview-canvas">
+                        <i class="fas fa-network-wired artifact-canvas-glow-icon" style="color: var(--neon-green); filter: drop-shadow(0 0 8px rgba(0,255,157,0.6));"></i>
+                        <span class="artifact-meta-strip">WEB CONTROL RADAR</span>
+                    </div>
+                    <div class="artifact-details">
                         <h4>Sentinel Web Command</h4>
-                        <p>Centralized client web interface for sending encrypted device directives.</p>
+                        <p>Centralized web command portal for sending encrypted device directives.</p>
                     </div>
                 </div>
 
-                <div class="gallery-item" data-category="python">
-                    <div class="gallery-visual-mock">
-                        <i class="fas fa-database fa-2x"></i>
-                        <span>SQLITE PIPELINE</span>
+                <!-- Gallery 4 -->
+                <div class="gallery-item" data-category="engineering">
+                    <div class="artifact-preview-canvas">
+                        <i class="fas fa-code artifact-canvas-glow-icon"></i>
+                        <span class="artifact-meta-strip">MODULAR ARCHITECTURE</span>
                     </div>
-                    <div>
-                        <h4>Local Inventory &amp; ERP</h4>
-                        <p>Lightweight transactional accounting system built for mobile terminals.</p>
+                    <div class="artifact-details">
+                        <h4>Python &amp; Web Modules</h4>
+                        <p>Reusable automation scripts, clean UI components, and responsive mobile builds.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- EDUCATION, WORKFLOW & SIGNATURE -->
+        <!-- --- EDUCATION, WORKFLOW & SIGNATURE --- -->
         <section id="about">
             <div class="editorial-trio">
                 <div class="trio-card">
                     <div>
-                        <span class="trio-label">Education &amp; Background</span>
+                        <span class="trio-label">Education &amp; Stack</span>
                         <div class="timeline-list">
                             <div class="timeline-row">
                                 <div>
@@ -992,14 +1381,13 @@
                         </div>
                     </div>
                     <div>
-                        <span class="trio-label" style="margin-bottom: 12px;">Core Tooling</span>
-                        <div class="tech-pill-row">
-                            <span class="tech-pill">Python</span>
-                            <span class="tech-pill">Android</span>
-                            <span class="tech-pill">JavaScript</span>
-                            <span class="tech-pill">SQL / MySQL</span>
-                            <span class="tech-pill">PHP</span>
-                            <span class="tech-pill">Git / GitHub</span>
+                        <span class="trio-label" style="margin-bottom: 10px;">Tooling Matrix</span>
+                        <div class="build-pill-row">
+                            <span class="build-pill">Python</span>
+                            <span class="build-pill">SQL / SQLite</span>
+                            <span class="build-pill">Android</span>
+                            <span class="build-pill">JavaScript</span>
+                            <span class="build-pill">Git</span>
                         </div>
                     </div>
                 </div>
@@ -1010,29 +1398,29 @@
                         <div class="wf-node">
                             <div class="wf-num">01</div>
                             <div class="wf-copy">
-                                <strong>Problem Scope</strong>
-                                <p>Defining security criteria, privacy limits, and fast hardware bounds.</p>
+                                <strong>Inspect &amp; Measure</strong>
+                                <p>Checking baseline performance, data schemas, and edge bounds.</p>
                             </div>
                         </div>
                         <div class="wf-node">
                             <div class="wf-num">02</div>
                             <div class="wf-copy">
                                 <strong>Local-First Design</strong>
-                                <p>Designing localized databases and offline pipelines that never leak telemetry.</p>
+                                <p>Designing localized databases and pipelines that never leak telemetry.</p>
                             </div>
                         </div>
                         <div class="wf-node">
                             <div class="wf-num">03</div>
                             <div class="wf-copy">
-                                <strong>Implementation</strong>
-                                <p>Writing modular, readable code across Python, web stacks, and Android.</p>
+                                <strong>Build &amp; Automate</strong>
+                                <p>Writing clean, modular code across Python, web, and native Android.</p>
                             </div>
                         </div>
                         <div class="wf-node">
                             <div class="wf-num">04</div>
                             <div class="wf-copy">
-                                <strong>Hardware Profiling</strong>
-                                <p>Benchmarking execution speed and power draw directly on client devices.</p>
+                                <strong>Verify on Hardware</strong>
+                                <p>Profiling execution speed and battery draw directly on physical devices.</p>
                             </div>
                         </div>
                     </div>
@@ -1056,13 +1444,13 @@
             </div>
         </section>
 
-        <!-- CONTACT DOCK -->
+        <!-- --- CONTACT DOCK --- -->
         <section id="contact">
             <div class="contact-dock">
                 <div>
                     <h2>Let's Build <span>Together</span></h2>
-                    <p style="color: var(--text-secondary); font-size: 0.92rem; line-height: 1.6; margin-bottom: 20px;">
-                        Open for entry-level Python backend, software engineering, and full-stack development opportunities across Bengaluru.
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.55; margin-bottom: 18px;">
+                        Open for entry-level Python backend, software engineering, data analytics, and full-stack roles in Bengaluru.
                     </p>
                     <a href="https://github.com/starktechdev26" target="_blank" rel="noopener" class="btn-deck-trigger">
                         <span>Explore GitHub Profile</span> <i class="fab fa-github"></i>
@@ -1094,6 +1482,28 @@
     </div>
 
     <script>
+        // Live stream updater for lab monitors
+        const metrics = ["98.4% CLEAN", "1.2k ROWS/S", "99.1% VALID", "0 NULL LEAKS"];
+        const secSteps = [
+            '<div>&gt; Auditing session &amp; token scope... <span class="ok">[PASS]</span></div><div>&gt; Verifying local SQLite isolation... <span class="ok">[LOCKED]</span></div><div>&gt; Checking exposed endpoints... <span class="ok">[MINIMAL]</span></div>',
+            '<div>&gt; Simulating input edge cases... <span class="warn">[HANDLED]</span></div><div>&gt; Reviewing permission boundaries... <span class="ok">[SCOPED]</span></div><div>&gt; Telemetry privacy check... <span class="ok">[LOCAL-ONLY]</span></div>'
+        ];
+        const engSteps = [
+            '<div>&gt; step 1: parse &amp; validate payload</div><div>&gt; step 2: update reactive UI state</div><div>&gt; step 3: zero-lag render check</div>',
+            '<div>&gt; step 1: query indexed dataset</div><div>&gt; step 2: compute summary metrics</div><div>&gt; step 3: commit clean patch</div>'
+        ];
+
+        let tick = 0;
+        setInterval(() => {
+            tick++;
+            const mEl = document.getElementById("metric-counter");
+            const sEl = document.getElementById("sec-feed");
+            const eEl = document.getElementById("code-feed");
+            if (mEl) mEl.textContent = metrics[tick % metrics.length];
+            if (sEl) sEl.innerHTML = secSteps[tick % secSteps.length];
+            if (eEl) eEl.innerHTML = engSteps[tick % engSteps.length];
+        }, 2600);
+
         function filterGallery(category, btn) {
             document.querySelectorAll(".gallery-filter-btn").forEach(b => b.classList.remove("active"));
             btn.classList.add("active");
