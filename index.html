@@ -13,7 +13,7 @@
             --neon-green: #00ffaa;
             --neon-amber: #ffaa00;
             --neon-red: #ff0044;
-            --panel-bg: rgba(4, 11, 24, 0.92);
+            --panel-bg: rgba(4, 11, 24, 0.95);
             --border-glow: rgba(0, 243, 255, 0.4);
             --font-hud: 'Share Tech Mono', monospace;
             --font-title: 'Orbitron', sans-serif;
@@ -54,10 +54,9 @@
             background: linear-gradient(180deg, #020611 0%, #061426 50%, #0d2745 100%);
         }
 
-        /* Weather State Lighting */
         body.weather-clear .sky-viewport { filter: brightness(1.05) saturate(1.1); }
         body.weather-cloudy .sky-viewport { filter: saturate(0.85) brightness(0.88); }
-        body.weather-rain .sky-viewport { filter: brightness(0.62) saturate(0.55); }
+        body.weather-rain .sky-viewport { filter: brightness(0.6) saturate(0.55); }
 
         /* Celestial Bodies */
         .celestial-sun, .celestial-moon {
@@ -127,14 +126,11 @@
             filter: url(#realistic-clouds) blur(2px);
         }
 
-        /* Weather-specific Cloud Opacity & Darkness */
         body.weather-clear .cloud-mass {
             opacity: 0.5;
             filter: url(#realistic-clouds) brightness(1.05) blur(1px);
         }
-        body.weather-clear .cloud-mass.layer-foreground {
-            opacity: 0.35;
-        }
+        body.weather-clear .cloud-mass.layer-foreground { opacity: 0.35; }
 
         body.weather-cloudy .cloud-mass {
             opacity: 0.92;
@@ -160,7 +156,6 @@
         @keyframes cloudDriftFast { 0% { transform: translate3d(-30vw, 0, 0); } 100% { transform: translate3d(15vw, 0, 0); } }
 
         /* --- CLOUD-ORIGIN REALISTIC RAIN CANVAS --- */
-        /* Positioned strictly starting from cloud underside (~18vh) to bottom */
         .rain-canvas-stage {
             position: fixed;
             top: 18vh;
@@ -173,9 +168,7 @@
             transition: opacity 0.8s ease;
         }
 
-        body.weather-rain .rain-canvas-stage {
-            opacity: 1;
-        }
+        body.weather-rain .rain-canvas-stage { opacity: 1; }
 
         /* --- VISIBLE MOUNTAIN RIDGES --- */
         .mountain-container {
@@ -667,7 +660,7 @@
         #auth-modal {
             position: fixed;
             inset: 0;
-            background: rgba(0, 5, 12, 0.9);
+            background: rgba(0, 5, 12, 0.92);
             backdrop-filter: blur(8px);
             display: none;
             justify-content: center;
@@ -678,37 +671,48 @@
 
         .auth-card {
             width: min(92vw, 360px);
+            margin: 0 auto;
             background: var(--panel-bg);
             border: 1px solid var(--neon-cyan);
-            border-radius: 10px;
+            border-radius: 12px;
             padding: 22px;
             text-align: center;
         }
 
         .auth-card input {
             width: 100%;
-            background: rgba(0, 0, 0, 0.65);
+            background: rgba(0, 0, 0, 0.75);
             border: 1px solid var(--border-glow);
             padding: 11px;
             text-align: center;
             font-family: var(--font-hud);
-            font-size: 1.05rem;
+            font-size: 1rem;
             color: var(--neon-cyan);
             margin: 14px 0;
             letter-spacing: 3px;
             outline: none;
-            border-radius: 4px;
+            border-radius: 6px;
+        }
+
+        .btn-unlock-contrast {
+            background: #071926 !important;
+            border: 1px solid var(--neon-green) !important;
+            color: var(--neon-green) !important;
+            font-weight: bold;
+        }
+
+        .btn-unlock-contrast:hover {
+            background: var(--neon-green) !important;
+            color: #030910 !important;
         }
     </style>
 </head>
-<!-- Initialized by default with Clear Clouds -->
 <body class="sky-day weather-clear">
 
     <div class="sky-viewport" id="sky-viewport"></div>
     <div class="celestial-sun"></div>
     <div class="celestial-moon"></div>
 
-    <!-- Procedural Vector Clouds -->
     <div class="cloud-stage">
         <svg style="position: absolute; width: 0; height: 0;">
             <filter id="realistic-clouds" x="0%" y="0%" width="100%" height="100%">
@@ -743,10 +747,8 @@
         </svg>
     </div>
 
-    <!-- Realistic Rain Canvas with Cloud-Underbelly Emitters & Splashes -->
     <canvas id="rain-canvas" class="rain-canvas-stage"></canvas>
 
-    <!-- Mountain Silhouette -->
     <div class="mountain-container">
         <svg class="mountain-svg" viewBox="0 0 1440 450" preserveAspectRatio="none">
             <path d="M0,180 Q220,90 460,160 T920,110 T1440,150 L1440,450 L0,450 Z" fill="#183a48" opacity="0.45" />
@@ -756,7 +758,6 @@
         </svg>
     </div>
 
-    <!-- Trains & Highway -->
     <div class="transit-infrastructure">
         <div class="rail-corridor">
             <div class="rail-track rail-upper"></div>
@@ -787,7 +788,6 @@
         </div>
     </div>
 
-    <!-- HUD Telemetry Header -->
     <header class="hud-header">
         <div class="brand-node">
             <h1>JINUTECH</h1>
@@ -803,7 +803,6 @@
                 <span>LOC &amp; DIR</span>
                 <b id="loc-dir-display">Nelamangala · --°</b>
             </div>
-            <!-- Tap to toggle weather sequence: Clear Clouds -> Cloudy -> Rain -->
             <div class="telemetry-item" onclick="cycleWeather()" title="Tap to toggle weather">
                 <span>WEATHER (TAP)</span>
                 <b id="weather-display">Clear Clouds</b>
@@ -811,7 +810,6 @@
         </div>
     </header>
 
-    <!-- Center Visitor Greeting + 8-Second Auto Redirect -->
     <div class="center-announcer">
         <div class="greeting-sub">// VISITOR TELEMETRY SYNC</div>
         <h2 class="greeting-main" id="greeting-main">GOOD DAY, VISITOR</h2>
@@ -826,7 +824,6 @@
         </div>
     </div>
 
-    <!-- Circular Command Trigger On Mountain -->
     <div class="circular-launcher">
         <div class="launcher-menu" id="launcher-menu">
             <div class="menu-title">// COMMAND &amp; LAUNCH MATRIX</div>
@@ -837,7 +834,7 @@
             </button>
 
             <button class="launch-btn secure" onclick="openAuth()">
-                <span>ENCRYPTED HUB [LOCK]</span>
+                <span>MASTER CONTROL [LOCK]</span>
                 <span>⚿</span>
             </button>
 
@@ -850,11 +847,11 @@
                 <button class="sub-site-btn" onclick="launchSite('portfolio.html')">
                     01 · PORTFOLIO SITE (Interactive Builds)
                 </button>
-                <button class="sub-site-btn" onclick="launchSite('https://jayakumar-2004.github.io/Sentinel-Web-Command/')">
-                    02 · RAKSHA-SURAKSHA WEB (Live Terminal)
+                <button class="sub-site-btn" onclick="launchSite('master.html')">
+                    02 · MASTER CONTROL CONSOLE (master.html)
                 </button>
-                <button class="sub-site-btn" onclick="openAuth()">
-                    03 · STARK MASTER OS (Encrypted Control)
+                <button class="sub-site-btn" onclick="launchSite('https://jayakumar-2004.github.io/Sentinel-Web-Command/')">
+                    03 · RAKSHA-SURAKSHA WEB (Live Terminal)
                 </button>
             </div>
         </div>
@@ -865,27 +862,33 @@
         </button>
     </div>
 
-    <!-- Auth Modal -->
+    <!-- Passphrase Gate (SHA-256 local digest; no plaintext secret in code) -->
     <div id="auth-modal">
         <div class="auth-card">
-            <h3>ENCRYPTED HUB LOCK</h3>
-            <p style="font-size: 0.74rem; color: #9ec5e8;">ENTER MASTER PASSPHRASE</p>
-            <input type="password" id="gate-pass" placeholder="••••••••" maxlength="32">
+            <h3>MASTER CONTROL GATE</h3>
+            <p id="auth-sub" style="font-size: 0.74rem; color: #9ec5e8; margin-top: 4px;">ENTER MASTER PASSPHRASE</p>
+            <input type="password" id="gate-pass" placeholder="••••••••" maxlength="64" autocomplete="off">
+            <div id="gate-confirm-wrap" style="display:none;">
+                <input type="password" id="gate-pass-confirm" placeholder="CONFIRM PASSPHRASE" maxlength="64" autocomplete="off">
+            </div>
             <div style="display: flex; gap: 10px;">
                 <button class="launch-btn" style="flex: 1; justify-content: center;" onclick="closeAuth()">CANCEL</button>
-                <button class="launch-btn" style="flex: 1; justify-content: center; border-color: var(--neon-green); color: var(--neon-green);" onclick="validatePass()">UNLOCK</button>
+                <button id="btn-auth-submit" class="launch-btn btn-unlock-contrast" style="flex: 1; justify-content: center;" onclick="validatePass()">UNLOCK</button>
             </div>
-            <div id="auth-error" style="color: var(--neon-red); font-size: 0.75rem; margin-top: 10px; display: none;">[ ACCESS DENIED ]</div>
+            <div id="auth-error" style="color: var(--neon-red); font-size: 0.75rem; margin-top: 10px; display: none;"></div>
         </div>
     </div>
 
     <script>
-        // 0: Clear Clouds (Default), 1: Heavy Cloudy, 2: Rain
-        let weatherState = 0; 
+        const MASTER_HASH_STORAGE_KEY = "jinutech_master_sha256";
+        const MASTER_SESSION_KEY = "jinutech_master_session";
+
+        let weatherState = 0;
         const weatherLabels = ["Clear Clouds", "Heavy Cloudy", "Live Rain"];
         let currentHeading = null;
         let currentLocLabel = "Nelamangala";
         let isRedirecting = false;
+        let isSettingInitialPass = false;
 
         function applySkyAndWeatherClasses() {
             const h = new Date().getHours();
@@ -907,7 +910,6 @@
             applySkyAndWeatherClasses();
         }
 
-        // Tap on sky also cycles weather
         document.getElementById("sky-viewport").addEventListener("click", cycleWeather);
 
         function headingToCardinal(deg) {
@@ -984,19 +986,18 @@
             );
         }
 
-        /* --- REALISTIC RAIN DROP & SPLASH ENGINE --- */
         const canvas = document.getElementById("rain-canvas");
         const ctx = canvas.getContext("2d");
         let cw, ch;
 
         function resizeCanvas() {
             cw = canvas.width = window.innerWidth;
-            ch = canvas.height = window.innerHeight * 0.82; // strictly under the clouds
+            ch = canvas.height = window.innerHeight * 0.82;
         }
         window.addEventListener("resize", resizeCanvas);
         resizeCanvas();
 
-        const dropCount = 130;
+        const dropCount = 145;
         const drops = [];
         const splashes = [];
 
@@ -1007,13 +1008,13 @@
 
             reset(initial = false) {
                 this.x = Math.random() * (cw + 120) - 60;
-                this.y = initial ? Math.random() * ch : -20; // starts at top of canvas (cloud underbelly)
-                this.z = Math.random() * 0.8 + 0.2; // depth factor (0.2 = far/slow, 1 = near/fast)
-                this.length = (14 + Math.random() * 12) * this.z;
-                this.speed = (16 + Math.random() * 10) * this.z;
-                this.angle = 0.12; // slight wind slant
-                this.alpha = (0.25 + Math.random() * 0.45) * this.z;
-                this.hitY = ch - 50 + (Math.random() * 30); // hits near bottom road
+                this.y = initial ? Math.random() * ch : -18;
+                this.z = Math.random() * 0.8 + 0.25;
+                this.length = (16 + Math.random() * 14) * this.z;
+                this.speed = (17 + Math.random() * 10) * this.z;
+                this.angle = 0.12;
+                this.alpha = (0.42 + Math.random() * 0.42) * this.z;
+                this.hitY = ch - 50 + (Math.random() * 28);
             }
 
             update() {
@@ -1021,9 +1022,8 @@
                 this.y += this.speed;
 
                 if (this.y >= this.hitY) {
-                    // Create subtle ground splash ripple
-                    if (Math.random() < 0.4) {
-                        splashes.push(new Splash(this.x, this.hitY, this.alpha));
+                    if (Math.random() < 0.45) {
+                        splashes.push(new Splash(this.x, this.hitY, Math.min(1, this.alpha + 0.15)));
                     }
                     this.reset(false);
                 }
@@ -1031,8 +1031,8 @@
 
             draw() {
                 ctx.beginPath();
-                ctx.strokeStyle = `rgba(180, 225, 255, ${this.alpha})`;
-                ctx.lineWidth = 1.2 * this.z;
+                ctx.strokeStyle = `rgba(195, 235, 255, ${this.alpha})`;
+                ctx.lineWidth = 1.5 * this.z;
                 ctx.lineCap = "round";
                 ctx.moveTo(this.x, this.y);
                 ctx.lineTo(this.x - (this.length * this.angle), this.y - this.length);
@@ -1045,19 +1045,18 @@
                 this.x = x;
                 this.y = y;
                 this.r = 1;
-                this.maxR = 6 + Math.random() * 5;
                 this.alpha = alpha;
             }
 
             update() {
-                this.r += 0.8;
+                this.r += 0.85;
                 this.alpha -= 0.05;
             }
 
             draw() {
                 ctx.beginPath();
-                ctx.strokeStyle = `rgba(180, 230, 255, ${this.alpha})`;
-                ctx.lineWidth = 0.8;
+                ctx.strokeStyle = `rgba(195, 238, 255, ${this.alpha})`;
+                ctx.lineWidth = 0.9;
                 ctx.ellipse(this.x, this.y, this.r * 1.6, this.r * 0.6, 0, 0, Math.PI * 2);
                 ctx.stroke();
             }
@@ -1070,7 +1069,7 @@
         function renderRain() {
             ctx.clearRect(0, 0, cw, ch);
 
-            if (weatherState === 2) { // only animate and render when Rain is active
+            if (weatherState === 2) {
                 for (let i = 0; i < drops.length; i++) {
                     drops[i].update();
                     drops[i].draw();
@@ -1089,7 +1088,6 @@
         }
         renderRain();
 
-        /* --- 8-SECOND AUTO REDIRECT --- */
         let remainingSeconds = 8;
         const timerTextEl = document.getElementById("timer-text");
         const countdownInterval = setInterval(() => {
@@ -1130,8 +1128,25 @@
             else window.location.href = url;
         }
 
+        async function sha256Hex(text) {
+            const encoder = new TextEncoder();
+            const buf = await crypto.subtle.digest("SHA-256", encoder.encode(text));
+            return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join("");
+        }
+
         function openAuth() {
             clearInterval(countdownInterval);
+            const hasDigest = Boolean(localStorage.getItem(MASTER_HASH_STORAGE_KEY));
+            isSettingInitialPass = !hasDigest;
+
+            document.getElementById("auth-sub").innerText = isSettingInitialPass
+                ? "SET LOCAL PASSPHRASE (SHA-256)"
+                : "ENTER MASTER PASSPHRASE";
+            document.getElementById("gate-confirm-wrap").style.display = isSettingInitialPass ? "block" : "none";
+            document.getElementById("btn-auth-submit").innerText = isSettingInitialPass ? "SAVE & OPEN" : "UNLOCK";
+            document.getElementById("auth-error").style.display = "none";
+            document.getElementById("gate-pass").value = "";
+            document.getElementById("gate-pass-confirm").value = "";
             document.getElementById("auth-modal").style.display = "flex";
             document.getElementById("launcher-menu").classList.remove("open");
             document.getElementById("gate-pass").focus();
@@ -1142,12 +1157,39 @@
             document.getElementById("auth-error").style.display = "none";
         }
 
-        function validatePass() {
+        function showAuthError(msg) {
+            const errEl = document.getElementById("auth-error");
+            errEl.innerText = msg;
+            errEl.style.display = "block";
+        }
+
+        async function validatePass() {
             const pass = document.getElementById("gate-pass").value;
-            if (pass === "Jinufolio@2026" || pass === "2026") {
-                window.location.href = "dashboard.html";
+            if (!pass || pass.length < 6) {
+                showAuthError("[ MIN 6 CHARS REQUIRED ]");
+                return;
+            }
+
+            if (isSettingInitialPass) {
+                const confirmPass = document.getElementById("gate-pass-confirm").value;
+                if (pass !== confirmPass) {
+                    showAuthError("[ PASSPHRASES DO NOT MATCH ]");
+                    return;
+                }
+                const digest = await sha256Hex(pass);
+                localStorage.setItem(MASTER_HASH_STORAGE_KEY, digest);
+                sessionStorage.setItem(MASTER_SESSION_KEY, "1");
+                window.location.href = "master.html";
+                return;
+            }
+
+            const storedDigest = localStorage.getItem(MASTER_HASH_STORAGE_KEY);
+            const candidateDigest = await sha256Hex(pass);
+            if (candidateDigest === storedDigest) {
+                sessionStorage.setItem(MASTER_SESSION_KEY, "1");
+                window.location.href = "master.html";
             } else {
-                document.getElementById("auth-error").style.display = "block";
+                showAuthError("[ ACCESS DENIED ]");
             }
         }
     </script>
