@@ -13,7 +13,7 @@
             --neon-green: #00ffaa;
             --neon-amber: #ffaa00;
             --neon-red: #ff0044;
-            --panel-bg: rgba(4, 11, 24, 0.95);
+            --panel-bg: rgba(4, 11, 24, 0.96);
             --border-glow: rgba(0, 243, 255, 0.4);
             --font-hud: 'Share Tech Mono', monospace;
             --font-title: 'Orbitron', sans-serif;
@@ -37,13 +37,13 @@
             color: #d8ecff;
         }
 
-        /* --- PROCEDURAL LIVE SKY --- */
+        /* --- PROCEDURAL SKY --- */
         .sky-viewport {
             position: fixed;
             inset: 0;
             z-index: 1;
             background: linear-gradient(180deg, #104882 0%, #2f7ec9 45%, #76b5eb 80%, #b8dbf9 100%);
-            transition: background 1.5s ease, filter 0.8s ease;
+            transition: background 0.8s ease, filter 0.6s ease;
         }
 
         body.sky-evening .sky-viewport {
@@ -54,9 +54,9 @@
             background: linear-gradient(180deg, #020611 0%, #061426 50%, #0d2745 100%);
         }
 
-        body.weather-clear .sky-viewport { filter: brightness(1.05) saturate(1.1); }
-        body.weather-cloudy .sky-viewport { filter: saturate(0.85) brightness(0.88); }
-        body.weather-rain .sky-viewport { filter: brightness(0.6) saturate(0.55); }
+        body.weather-clear .sky-viewport { filter: brightness(1.04) saturate(1.08); }
+        body.weather-cloudy .sky-viewport { filter: saturate(0.85) brightness(0.86); }
+        body.weather-rain .sky-viewport { filter: brightness(0.58) saturate(0.55); }
 
         /* Celestial Bodies */
         .celestial-sun, .celestial-moon {
@@ -65,41 +65,32 @@
             z-index: 2;
             pointer-events: none;
             will-change: transform, opacity;
-            transition: opacity 1s ease;
+            transition: opacity 0.8s ease;
         }
 
         .celestial-sun {
-            width: 82px;
-            height: 82px;
+            width: 78px;
+            height: 78px;
             top: 16%;
             right: 14%;
-            background: radial-gradient(circle, #ffffff 12%, #fff1a8 32%, #ffaa22 75%, rgba(255,160,0,0) 100%);
-            box-shadow: 0 0 45px rgba(255, 175, 40, 0.8), 0 0 95px rgba(255, 150, 0, 0.4);
+            background: radial-gradient(circle, #ffffff 12%, #fff1a8 35%, #ffaa22 75%, rgba(255,160,0,0) 100%);
             opacity: 1;
-            animation: sunPulse 6s ease-in-out infinite alternate;
         }
 
         .celestial-moon {
-            width: 68px;
-            height: 68px;
+            width: 66px;
+            height: 66px;
             top: 16%;
             left: 14%;
-            background: radial-gradient(circle at 35% 35%, #ffffff 0%, #d8e5f2 50%, #90a8c0 100%);
-            box-shadow: 0 0 35px rgba(215, 235, 255, 0.7), inset -8px -6px 0 rgba(15, 30, 50, 0.35);
+            background: radial-gradient(circle at 35% 35%, #ffffff 0%, #d8e5f2 55%, #90a8c0 100%);
             opacity: 0;
-            animation: sunPulse 7s ease-in-out infinite alternate;
         }
 
         body.sky-night .celestial-sun, body.sky-evening .celestial-sun { opacity: 0; }
         body.sky-night .celestial-moon, body.sky-evening .celestial-moon { opacity: 0.95; }
         body.weather-rain .celestial-sun, body.weather-rain .celestial-moon { opacity: 0.08; }
 
-        @keyframes sunPulse {
-            0% { transform: scale(1) translate3d(0, 0, 0); }
-            100% { transform: scale(1.04) translate3d(8px, -6px, 0); }
-        }
-
-        /* --- PROCEDURAL CLOUD STAGE --- */
+        /* --- SMOOTH GPU CLOUD LAYERS (NO HEAVY SVG TURBULENCE) --- */
         .cloud-stage {
             position: fixed;
             inset: 0;
@@ -108,77 +99,88 @@
             overflow: hidden;
         }
 
-        .cloud-mass {
+        .cloud-band {
             position: absolute;
-            width: 220vw;
-            height: 44vh;
-            top: 4%;
-            left: -30vw;
-            filter: url(#realistic-clouds) blur(1px);
-            opacity: 0.55;
-            transition: opacity 1.2s ease, filter 1.2s ease;
-            animation: cloudDriftSlow 75s linear infinite;
+            left: -40vw;
+            width: 180vw;
+            height: 22vh;
+            top: 7%;
+            border-radius: 999px;
+            background:
+                radial-gradient(ellipse 22% 65% at 18% 55%, rgba(255,255,255,0.48), transparent 72%),
+                radial-gradient(ellipse 28% 75% at 45% 45%, rgba(235,246,255,0.52), transparent 75%),
+                radial-gradient(ellipse 24% 60% at 75% 58%, rgba(220,236,250,0.45), transparent 72%);
+            filter: blur(14px);
+            will-change: transform, opacity;
+            animation: driftLeft 70s linear infinite;
+            transition: opacity 0.8s ease, filter 0.8s ease;
         }
 
-        .cloud-mass.layer-foreground {
-            top: 12%;
-            opacity: 0.4;
-            animation: cloudDriftFast 45s linear infinite;
-            filter: url(#realistic-clouds) blur(2px);
+        .cloud-band.fg {
+            top: 14%;
+            height: 18vh;
+            opacity: 0.35;
+            filter: blur(18px);
+            animation: driftRight 48s linear infinite;
         }
 
-        body.weather-clear .cloud-mass {
-            opacity: 0.45;
-            filter: url(#realistic-clouds) brightness(1.05) blur(1px);
-        }
-        body.weather-clear .cloud-mass.layer-foreground { opacity: 0.32; }
+        body.weather-clear .cloud-band { opacity: 0.45; }
+        body.weather-clear .cloud-band.fg { opacity: 0.3; }
 
-        body.weather-cloudy .cloud-mass {
-            opacity: 0.92;
-            filter: url(#realistic-clouds) brightness(0.82) blur(1px);
+        body.weather-cloudy .cloud-band {
+            opacity: 0.88;
+            filter: blur(14px) brightness(0.78);
         }
-        body.weather-cloudy .cloud-mass.layer-foreground {
-            opacity: 0.8;
-            filter: url(#realistic-clouds) brightness(0.78) blur(2px);
+        body.weather-cloudy .cloud-band.fg {
+            opacity: 0.75;
+            filter: blur(18px) brightness(0.74);
         }
 
-        body.weather-rain .cloud-mass {
-            opacity: 0.98;
-            filter: url(#realistic-clouds) brightness(0.42) blur(1px);
+        body.weather-rain .cloud-band {
+            opacity: 0.96;
+            filter: blur(14px) brightness(0.38);
         }
-        body.weather-rain .cloud-mass.layer-foreground {
-            opacity: 0.9;
-            filter: url(#realistic-clouds) brightness(0.38) blur(2px);
+        body.weather-rain .cloud-band.fg {
+            opacity: 0.88;
+            filter: blur(18px) brightness(0.34);
         }
 
-        body.sky-night .cloud-mass { filter: url(#realistic-clouds) brightness(0.32); }
+        body.sky-night .cloud-band { filter: blur(14px) brightness(0.28); }
+        body.sky-night .cloud-band.fg { filter: blur(18px) brightness(0.24); }
 
-        @keyframes cloudDriftSlow { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-35vw, 0, 0); } }
-        @keyframes cloudDriftFast { 0% { transform: translate3d(-30vw, 0, 0); } 100% { transform: translate3d(15vw, 0, 0); } }
+        @keyframes driftLeft {
+            0% { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(-22vw, 0, 0); }
+        }
 
-        /* --- CLOUD-ORIGIN REALISTIC RAIN CANVAS --- */
+        @keyframes driftRight {
+            0% { transform: translate3d(-18vw, 0, 0); }
+            100% { transform: translate3d(12vw, 0, 0); }
+        }
+
+        /* --- CLOUD-UNDERBELLY RAIN CANVAS --- */
         .rain-canvas-stage {
             position: fixed;
-            top: 18vh;
+            top: 19vh;
             left: 0;
             width: 100vw;
-            height: 82vh;
+            height: 81vh;
             z-index: 4;
             pointer-events: none;
             opacity: 0;
-            transition: opacity 0.8s ease;
+            transition: opacity 0.5s ease;
         }
 
         body.weather-rain .rain-canvas-stage { opacity: 1; }
 
-        /* --- VISIBLE MOUNTAIN RIDGES --- */
+        /* --- MOUNTAIN RIDGES --- */
         .mountain-container {
             position: fixed;
             left: 0;
             right: 0;
             bottom: 66px;
             width: 100%;
-            height: 36vh;
+            height: 35vh;
             z-index: 5;
             pointer-events: none;
         }
@@ -226,23 +228,25 @@
         .train-ltr {
             position: absolute;
             top: -4px;
-            left: -260px;
-            width: 220px;
+            left: -240px;
+            width: 210px;
             height: 10px;
             display: flex;
             gap: 2px;
-            animation: trainLTR 15s linear infinite;
+            will-change: transform;
+            animation: trainLTR 16s linear infinite;
         }
 
         .train-rtl {
             position: absolute;
             top: 8px;
             left: 100vw;
-            width: 220px;
+            width: 210px;
             height: 10px;
             display: flex;
             gap: 2px;
-            animation: trainRTL 18s linear infinite 2s;
+            will-change: transform;
+            animation: trainRTL 19s linear infinite 2s;
         }
 
         .train-car {
@@ -250,7 +254,6 @@
             height: 100%;
             background: linear-gradient(180deg, #00f3ff, #005588);
             border-radius: 2px;
-            box-shadow: 0 0 8px rgba(0, 243, 255, 0.45);
             font-size: 6px;
             display: flex;
             align-items: center;
@@ -260,27 +263,25 @@
         }
 
         .train-engine-right {
-            width: 30px;
+            width: 28px;
             background: #ffaa00;
-            box-shadow: 0 0 10px #ffaa00;
             border-radius: 2px 5px 2px 2px;
         }
 
         .train-engine-left {
-            width: 30px;
+            width: 28px;
             background: #00ffaa;
-            box-shadow: 0 0 10px #00ffaa;
             border-radius: 5px 2px 2px 2px;
         }
 
         @keyframes trainLTR {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(135vw); }
+            0% { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(135vw, 0, 0); }
         }
 
         @keyframes trainRTL {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-135vw); }
+            0% { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(-135vw, 0, 0); }
         }
 
         .highway-road {
@@ -326,31 +327,29 @@
             width: 34px;
             height: 9px;
             border-radius: 3px;
-            box-shadow: 0 0 10px currentColor;
+            will-change: transform;
         }
 
         .v-upper-rtl {
             left: 100vw;
             background: #00ffaa;
-            color: #00ffaa;
-            animation: laneRTL 11s linear infinite;
+            animation: laneRTL 12s linear infinite;
         }
 
         .v-lower-ltr {
             left: -50px;
             background: #ff0044;
-            color: #ff0044;
-            animation: laneLTR 13s linear infinite 2s;
+            animation: laneLTR 14s linear infinite 2s;
         }
 
         @keyframes laneRTL {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-130vw); }
+            0% { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(-130vw, 0, 0); }
         }
 
         @keyframes laneLTR {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(130vw); }
+            0% { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(130vw, 0, 0); }
         }
 
         /* --- TELEMETRY HEADER --- */
@@ -365,10 +364,9 @@
             align-items: center;
             gap: 10px;
             padding: 10px 14px;
-            background: rgba(3, 10, 22, 0.86);
+            background: rgba(3, 10, 22, 0.88);
             border: 1px solid var(--border-glow);
             border-radius: 10px;
-            backdrop-filter: blur(8px);
             z-index: 20;
         }
 
@@ -377,7 +375,6 @@
             font-size: clamp(1.05rem, 3.4vw, 1.65rem);
             letter-spacing: 1.5px;
             color: #ffffff;
-            text-shadow: 0 0 14px rgba(0, 243, 255, 0.55);
         }
 
         .brand-node span {
@@ -390,19 +387,18 @@
 
         .telemetry-cluster {
             display: flex;
-            flex-wrap: wrap;
             gap: 8px;
         }
 
         .telemetry-item {
             background: rgba(0, 243, 255, 0.06);
             border: 1px solid rgba(0, 243, 255, 0.24);
-            padding: 5px 10px;
+            padding: 5px 9px;
             border-radius: 7px;
-            min-width: 105px;
+            min-width: 0;
             text-align: right;
             cursor: pointer;
-            transition: all 0.2s;
+            overflow: hidden;
         }
 
         .telemetry-item:hover {
@@ -412,43 +408,45 @@
 
         .telemetry-item span {
             display: block;
-            font-size: 0.6rem;
+            font-size: 0.58rem;
             color: var(--neon-cyan);
-            letter-spacing: 0.8px;
+            letter-spacing: 0.6px;
+            white-space: nowrap;
         }
 
         .telemetry-item b {
             display: block;
             color: #ffffff;
-            font-size: clamp(0.74rem, 2vw, 0.95rem);
+            font-size: clamp(0.68rem, 1.85vw, 0.92rem);
             font-family: var(--font-title);
             margin-top: 2px;
             white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
-        /* Compact Mobile Telemetry Layout so Header Never Overlaps Center Announcer */
         @media (max-width: 640px) {
             .hud-header {
                 flex-direction: column;
                 align-items: stretch;
                 gap: 8px;
-                padding: 9px 11px;
+                padding: 9px 10px;
             }
 
             .brand-node {
                 display: flex;
                 justify-content: space-between;
                 align-items: baseline;
+                gap: 8px;
             }
 
             .telemetry-cluster {
                 display: grid;
-                grid-template-columns: repeat(3, 1fr);
+                grid-template-columns: 0.95fr 1.15fr 0.95fr;
                 gap: 6px;
             }
 
             .telemetry-item {
-                min-width: 0;
                 padding: 5px 6px;
                 text-align: center;
             }
@@ -457,7 +455,7 @@
         /* Center Greeting & Progress */
         .center-announcer {
             position: fixed;
-            top: 47%;
+            top: 48%;
             left: 50%;
             transform: translate(-50%, -50%);
             text-align: center;
@@ -468,26 +466,25 @@
         }
 
         .greeting-sub {
-            font-size: 0.72rem;
-            letter-spacing: 2.5px;
+            font-size: 0.7rem;
+            letter-spacing: 2px;
             color: var(--neon-cyan);
             margin-bottom: 6px;
             text-transform: uppercase;
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.85);
         }
 
         .greeting-main {
             font-family: var(--font-title);
-            font-size: clamp(1.45rem, 5.2vw, 3.2rem);
+            font-size: clamp(1.4rem, 5vw, 3rem);
             font-weight: 900;
             color: #ffffff;
-            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.9), 0 0 24px rgba(0, 243, 255, 0.7);
+            text-shadow: 0 2px 16px rgba(0, 0, 0, 0.85);
             letter-spacing: 1.5px;
             line-height: 1.15;
         }
 
         .vis-anim-wrap {
-            width: min(210px, 58vw);
+            width: min(210px, 56vw);
             height: 7px;
             margin: 11px auto 0;
             border-radius: 999px;
@@ -504,12 +501,13 @@
             width: 35%;
             height: 100%;
             background: linear-gradient(90deg, transparent, var(--neon-cyan), var(--neon-green), transparent);
-            animation: sweepBar 2.1s ease-in-out infinite;
+            will-change: transform;
+            animation: sweepBar 2.2s ease-in-out infinite;
         }
 
         @keyframes sweepBar {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(385%); }
+            0% { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(385%, 0, 0); }
         }
 
         .countdown-strip {
@@ -542,12 +540,16 @@
             animation: timerFill 8s linear forwards;
         }
 
+        .countdown-bar-fill.paused {
+            animation-play-state: paused;
+        }
+
         @keyframes timerFill {
             0% { width: 0%; }
             100% { width: 100%; }
         }
 
-        /* --- CIRCULAR LAUNCH BUTTON (ON MOUNTAIN) --- */
+        /* --- CIRCULAR LAUNCH BUTTON --- */
         .circular-launcher {
             position: fixed;
             bottom: 90px;
@@ -563,27 +565,25 @@
             width: 60px;
             height: 60px;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(0, 243, 255, 0.28) 0%, rgba(4, 11, 24, 0.95) 75%);
+            background: radial-gradient(circle, rgba(0, 243, 255, 0.28) 0%, rgba(4, 11, 24, 0.96) 75%);
             border: 2px solid var(--neon-cyan);
-            box-shadow: 0 0 24px rgba(0, 243, 255, 0.65), inset 0 0 14px rgba(0, 243, 255, 0.4);
             cursor: pointer;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            transition: all 0.3s ease;
+            transition: transform 0.2s ease, border-color 0.2s ease;
         }
 
-        .core-orb-btn:hover, .core-orb-btn:active {
-            transform: scale(1.08);
-            box-shadow: 0 0 32px var(--neon-cyan), inset 0 0 22px var(--neon-green);
+        .core-orb-btn:active {
+            transform: scale(0.96);
             border-color: var(--neon-green);
         }
 
         .orb-icon {
             font-size: 18px;
             color: var(--neon-cyan);
-            transition: transform 0.35s ease;
+            transition: transform 0.25s ease;
         }
 
         .orb-tag {
@@ -597,26 +597,17 @@
         .launcher-menu {
             position: absolute;
             bottom: 74px;
-            width: min(92vw, 370px);
+            width: min(92vw, 360px);
             background: var(--panel-bg);
             border: 1px solid var(--border-glow);
             border-radius: 14px;
-            padding: 15px;
-            backdrop-filter: blur(14px);
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 243, 255, 0.3);
+            padding: 14px;
             display: none;
             flex-direction: column;
-            gap: 9px;
-            transform-origin: bottom center;
-            animation: menuPopup 0.25s ease forwards;
+            gap: 8px;
         }
 
         .launcher-menu.open { display: flex; }
-
-        @keyframes menuPopup {
-            from { opacity: 0; transform: scale(0.88) translateY(14px); }
-            to { opacity: 1; transform: scale(1) translateY(0); }
-        }
 
         .menu-title {
             font-size: 0.72rem;
@@ -631,16 +622,15 @@
             background: rgba(0, 243, 255, 0.08);
             border: 1px solid rgba(0, 243, 255, 0.3);
             color: #ffffff;
-            padding: 11px 14px;
+            padding: 10px 14px;
             border-radius: 8px;
             font-family: var(--font-hud);
-            font-size: 0.82rem;
+            font-size: 0.8rem;
             letter-spacing: 1px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            transition: all 0.2s ease;
         }
 
         .launch-btn:hover {
@@ -664,7 +654,7 @@
             gap: 6px;
             margin-top: 2px;
             padding: 8px;
-            background: rgba(0, 5, 12, 0.75);
+            background: rgba(0, 5, 12, 0.8);
             border-radius: 6px;
             border: 1px dashed rgba(0, 243, 255, 0.3);
         }
@@ -691,7 +681,6 @@
             position: fixed;
             inset: 0;
             background: rgba(0, 5, 12, 0.92);
-            backdrop-filter: blur(8px);
             display: none;
             justify-content: center;
             align-items: center;
@@ -705,7 +694,7 @@
             background: var(--panel-bg);
             border: 1px solid var(--neon-cyan);
             border-radius: 12px;
-            padding: 22px;
+            padding: 20px;
             text-align: center;
         }
 
@@ -713,12 +702,12 @@
             width: 100%;
             background: rgba(0, 0, 0, 0.75);
             border: 1px solid var(--border-glow);
-            padding: 11px;
+            padding: 10px;
             text-align: center;
             font-family: var(--font-hud);
-            font-size: 1rem;
+            font-size: 0.95rem;
             color: var(--neon-cyan);
-            margin: 14px 0;
+            margin: 12px 0;
             letter-spacing: 3px;
             outline: none;
             border-radius: 6px;
@@ -730,11 +719,6 @@
             color: var(--neon-green) !important;
             font-weight: bold;
         }
-
-        .btn-unlock-contrast:hover {
-            background: var(--neon-green) !important;
-            color: #030910 !important;
-        }
     </style>
 </head>
 <body class="sky-day weather-clear">
@@ -744,37 +728,8 @@
     <div class="celestial-moon"></div>
 
     <div class="cloud-stage">
-        <svg style="position: absolute; width: 0; height: 0;">
-            <filter id="realistic-clouds" x="0%" y="0%" width="100%" height="100%">
-                <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="4" seed="42" result="noise" />
-                <feDisplacementMap in="SourceGraphic" in2="noise" scale="65" xChannelSelector="R" yChannelSelector="G" />
-            </filter>
-        </svg>
-
-        <svg class="cloud-mass" viewBox="0 0 1200 400" preserveAspectRatio="none">
-            <defs>
-                <radialGradient id="cloudGrad1" cx="50%" cy="50%" r="50%">
-                    <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95"/>
-                    <stop offset="55%" stop-color="#eaf3fc" stop-opacity="0.82"/>
-                    <stop offset="100%" stop-color="#cfdfee" stop-opacity="0"/>
-                </radialGradient>
-            </defs>
-            <ellipse cx="250" cy="180" rx="240" ry="110" fill="url(#cloudGrad1)"/>
-            <ellipse cx="600" cy="160" rx="320" ry="140" fill="url(#cloudGrad1)"/>
-            <ellipse cx="980" cy="190" rx="260" ry="120" fill="url(#cloudGrad1)"/>
-        </svg>
-
-        <svg class="cloud-mass layer-foreground" viewBox="0 0 1200 400" preserveAspectRatio="none">
-            <defs>
-                <radialGradient id="cloudGrad2" cx="50%" cy="50%" r="50%">
-                    <stop offset="0%" stop-color="#ffffff" stop-opacity="0.75"/>
-                    <stop offset="65%" stop-color="#dfeefa" stop-opacity="0.55"/>
-                    <stop offset="100%" stop-color="#bed6ec" stop-opacity="0"/>
-                </radialGradient>
-            </defs>
-            <ellipse cx="380" cy="220" rx="310" ry="120" fill="url(#cloudGrad2)"/>
-            <ellipse cx="820" cy="200" rx="340" ry="130" fill="url(#cloudGrad2)"/>
-        </svg>
+        <div class="cloud-band"></div>
+        <div class="cloud-band fg"></div>
     </div>
 
     <canvas id="rain-canvas" class="rain-canvas-stage"></canvas>
@@ -831,7 +786,7 @@
             </div>
             <div class="telemetry-item">
                 <span>LOC &amp; DIR</span>
-                <b id="loc-dir-display">Nelamangala · --°</b>
+                <b id="loc-dir-display">Nelamangala</b>
             </div>
             <div class="telemetry-item" onclick="cycleWeather()" title="Tap to toggle weather">
                 <span>WEATHER (TAP)</span>
@@ -849,7 +804,7 @@
         <div class="countdown-strip">
             <span class="countdown-label" id="timer-text">LAUNCHING PORTFOLIO IN 8s</span>
             <div class="countdown-bar-bg">
-                <div class="countdown-bar-fill"></div>
+                <div class="countdown-bar-fill" id="timer-fill"></div>
             </div>
         </div>
     </div>
@@ -916,53 +871,63 @@
         const weatherLabels = ["Clear Clouds", "Heavy Cloudy", "Live Rain"];
         let currentHeading = null;
         let currentLocLabel = "Nelamangala";
+        let lastSkyBucket = "";
         let isRedirecting = false;
         let isSettingInitialPass = false;
 
-        function applySkyAndWeatherClasses() {
-            const h = new Date().getHours();
-            document.body.classList.remove("sky-day", "sky-evening", "sky-night", "weather-clear", "weather-cloudy", "weather-rain");
+        function getSkyBucket(hour) {
+            if (hour >= 5 && hour < 17) return "sky-day";
+            if (hour >= 17 && hour < 20) return "sky-evening";
+            return "sky-night";
+        }
 
-            if (h >= 5 && h < 17) document.body.classList.add("sky-day");
-            else if (h >= 17 && h < 20) document.body.classList.add("sky-evening");
-            else document.body.classList.add("sky-night");
+        function applySkyAndWeatherClasses(hour) {
+            const nextSky = getSkyBucket(hour);
+            if (nextSky !== lastSkyBucket) {
+                document.body.classList.remove("sky-day", "sky-evening", "sky-night");
+                document.body.classList.add(nextSky);
+                lastSkyBucket = nextSky;
+            }
 
+            document.body.classList.remove("weather-clear", "weather-cloudy", "weather-rain");
             if (weatherState === 0) document.body.classList.add("weather-clear");
             else if (weatherState === 1) document.body.classList.add("weather-cloudy");
             else document.body.classList.add("weather-rain");
 
-            document.getElementById("weather-display").innerText = weatherLabels[weatherState];
+            document.getElementById("weather-display").textContent = weatherLabels[weatherState];
         }
 
         function cycleWeather() {
+            pauseRedirect();
             weatherState = (weatherState + 1) % 3;
-            applySkyAndWeatherClasses();
+            applySkyAndWeatherClasses(new Date().getHours());
         }
 
         document.getElementById("sky-viewport").addEventListener("click", cycleWeather);
 
         function headingToCardinal(deg) {
-            if (typeof deg !== "number" || Number.isNaN(deg)) return "--°";
+            if (typeof deg !== "number" || Number.isNaN(deg)) return "";
             const dirs = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
             const idx = Math.round(((deg % 360) + 360) % 360 / 45) % 8;
-            return `${Math.round(deg)}° ${dirs[idx]}`;
+            return ` · ${Math.round(deg)}° ${dirs[idx]}`;
         }
 
         function updateLocDirText() {
-            document.getElementById("loc-dir-display").innerText = `${currentLocLabel} · ${headingToCardinal(currentHeading)}`;
+            const label = `${currentLocLabel}${headingToCardinal(currentHeading)}`;
+            document.getElementById("loc-dir-display").textContent = label;
         }
 
         function updateClockAndGreeting() {
             const now = new Date();
             const h = now.getHours();
 
-            document.getElementById("date-full-display").innerText = now.toLocaleDateString("en-GB", {
+            document.getElementById("date-full-display").textContent = now.toLocaleDateString("en-GB", {
                 day: "numeric",
                 month: "long",
                 year: "numeric"
             });
 
-            document.getElementById("time-12h-display").innerText = now.toLocaleTimeString("en-US", {
+            document.getElementById("time-12h-display").textContent = now.toLocaleTimeString("en-US", {
                 hour: "2-digit",
                 minute: "2-digit",
                 second: "2-digit",
@@ -974,12 +939,12 @@
             else if (h >= 17 && h < 21) greet = "GOOD EVENING, VISITOR";
             else if (h >= 21 || h < 5) greet = "GOOD NIGHT, VISITOR";
 
-            document.getElementById("greeting-main").innerText = greet;
-            applySkyAndWeatherClasses();
-            updateLocDirText();
+            document.getElementById("greeting-main").textContent = greet;
+            applySkyAndWeatherClasses(h);
         }
 
         updateClockAndGreeting();
+        updateLocDirText();
         setInterval(updateClockAndGreeting, 1000);
 
         window.addEventListener("deviceorientationabsolute", (e) => {
@@ -999,9 +964,9 @@
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 (pos) => {
-                    const lat = pos.coords.latitude.toFixed(2);
-                    const lon = pos.coords.longitude.toFixed(2);
-                    currentLocLabel = `${lat}°N, ${lon}°E`;
+                    const lat = pos.coords.latitude.toFixed(1);
+                    const lon = pos.coords.longitude.toFixed(1);
+                    currentLocLabel = `${lat}°N,${lon}°E`;
                     if (typeof pos.coords.heading === "number" && !Number.isNaN(pos.coords.heading)) {
                         currentHeading = pos.coords.heading;
                     }
@@ -1011,22 +976,24 @@
                     currentLocLabel = "Nelamangala";
                     updateLocDirText();
                 },
-                { timeout: 6000 }
+                { timeout: 5000 }
             );
         }
 
+        /* --- LIGHTWEIGHT RAIN & SPLASH ENGINE --- */
         const canvas = document.getElementById("rain-canvas");
         const ctx = canvas.getContext("2d");
-        let cw, ch;
+        let cw = 0;
+        let ch = 0;
 
         function resizeCanvas() {
             cw = canvas.width = window.innerWidth;
-            ch = canvas.height = window.innerHeight * 0.82;
+            ch = canvas.height = Math.floor(window.innerHeight * 0.81);
         }
         window.addEventListener("resize", resizeCanvas);
         resizeCanvas();
 
-        const dropCount = 145;
+        const dropCount = 85;
         const drops = [];
         const splashes = [];
 
@@ -1035,24 +1002,23 @@
                 this.reset(true);
             }
 
-            reset(initial = false) {
-                this.x = Math.random() * (cw + 120) - 60;
-                this.y = initial ? Math.random() * ch : -18;
-                this.z = Math.random() * 0.8 + 0.25;
-                this.length = (16 + Math.random() * 14) * this.z;
-                this.speed = (17 + Math.random() * 10) * this.z;
+            reset(initial) {
+                this.x = Math.random() * (cw + 80) - 40;
+                this.y = initial ? Math.random() * ch : -16;
+                this.z = Math.random() * 0.75 + 0.25;
+                this.length = (14 + Math.random() * 12) * this.z;
+                this.speed = (16 + Math.random() * 9) * this.z;
                 this.angle = 0.12;
-                this.alpha = (0.42 + Math.random() * 0.42) * this.z;
-                this.hitY = ch - 50 + (Math.random() * 28);
+                this.alpha = (0.4 + Math.random() * 0.4) * this.z;
+                this.hitY = ch - 46 + (Math.random() * 22);
             }
 
             update() {
                 this.x += this.speed * this.angle;
                 this.y += this.speed;
-
                 if (this.y >= this.hitY) {
-                    if (Math.random() < 0.45) {
-                        splashes.push(new Splash(this.x, this.hitY, Math.min(1, this.alpha + 0.15)));
+                    if (splashes.length < 30 && Math.random() < 0.35) {
+                        splashes.push({ x: this.x, y: this.hitY, r: 1, alpha: Math.min(0.9, this.alpha + 0.15) });
                     }
                     this.reset(false);
                 }
@@ -1061,32 +1027,9 @@
             draw() {
                 ctx.beginPath();
                 ctx.strokeStyle = `rgba(195, 235, 255, ${this.alpha})`;
-                ctx.lineWidth = 1.5 * this.z;
-                ctx.lineCap = "round";
+                ctx.lineWidth = 1.4 * this.z;
                 ctx.moveTo(this.x, this.y);
                 ctx.lineTo(this.x - (this.length * this.angle), this.y - this.length);
-                ctx.stroke();
-            }
-        }
-
-        class Splash {
-            constructor(x, y, alpha) {
-                this.x = x;
-                this.y = y;
-                this.r = 1;
-                this.alpha = alpha;
-            }
-
-            update() {
-                this.r += 0.85;
-                this.alpha -= 0.05;
-            }
-
-            draw() {
-                ctx.beginPath();
-                ctx.strokeStyle = `rgba(195, 238, 255, ${this.alpha})`;
-                ctx.lineWidth = 0.9;
-                ctx.ellipse(this.x, this.y, this.r * 1.6, this.r * 0.6, 0, 0, Math.PI * 2);
                 ctx.stroke();
             }
         }
@@ -1096,34 +1039,50 @@
         }
 
         function renderRain() {
-            ctx.clearRect(0, 0, cw, ch);
-
             if (weatherState === 2) {
+                ctx.clearRect(0, 0, cw, ch);
                 for (let i = 0; i < drops.length; i++) {
                     drops[i].update();
                     drops[i].draw();
                 }
-
                 for (let i = splashes.length - 1; i >= 0; i--) {
-                    splashes[i].update();
-                    splashes[i].draw();
-                    if (splashes[i].alpha <= 0) {
-                        splashes.splice(i, 1);
-                    }
+                    const s = splashes[i];
+                    ctx.beginPath();
+                    ctx.strokeStyle = `rgba(195, 238, 255, ${s.alpha})`;
+                    ctx.lineWidth = 0.9;
+                    ctx.ellipse(s.x, s.y, s.r * 1.6, s.r * 0.6, 0, 0, Math.PI * 2);
+                    ctx.stroke();
+                    s.r += 0.9;
+                    s.alpha -= 0.06;
+                    if (s.alpha <= 0) splashes.splice(i, 1);
                 }
+            } else {
+                ctx.clearRect(0, 0, cw, ch);
             }
-
             requestAnimationFrame(renderRain);
         }
-        renderRain();
+        requestAnimationFrame(renderRain);
 
+        /* --- REDIRECT CONTROL --- */
         let remainingSeconds = 8;
+        let redirectPaused = false;
         const timerTextEl = document.getElementById("timer-text");
+        const timerFillEl = document.getElementById("timer-fill");
+
+        function pauseRedirect() {
+            if (!redirectPaused) {
+                redirectPaused = true;
+                if (timerFillEl) timerFillEl.classList.add("paused");
+                if (timerTextEl && !isRedirecting) timerTextEl.textContent = "AUTO-REDIRECT PAUSED";
+            }
+        }
+
         const countdownInterval = setInterval(() => {
+            if (redirectPaused || isRedirecting) return;
             remainingSeconds--;
-            if (remainingSeconds > 0 && timerTextEl) {
-                timerTextEl.innerText = `LAUNCHING PORTFOLIO IN ${remainingSeconds}s`;
-            } else if (remainingSeconds <= 0) {
+            if (remainingSeconds > 0) {
+                if (timerTextEl) timerTextEl.textContent = `LAUNCHING PORTFOLIO IN ${remainingSeconds}s`;
+            } else {
                 clearInterval(countdownInterval);
                 openPortfolio();
             }
@@ -1137,8 +1096,7 @@
         }
 
         function toggleLauncherMenu() {
-            clearInterval(countdownInterval);
-            if (timerTextEl) timerTextEl.innerText = "AUTO-REDIRECT PAUSED";
+            pauseRedirect();
             const menu = document.getElementById("launcher-menu");
             const icon = document.getElementById("orb-icon");
             menu.classList.toggle("open");
@@ -1149,7 +1107,7 @@
             const sub = document.getElementById("store-subdrawer");
             const arr = document.getElementById("store-arrow");
             sub.classList.toggle("active");
-            arr.innerText = sub.classList.contains("active") ? "▲" : "▼";
+            arr.textContent = sub.classList.contains("active") ? "▲" : "▼";
         }
 
         function launchSite(url) {
@@ -1158,21 +1116,20 @@
         }
 
         async function sha256Hex(text) {
-            const encoder = new TextEncoder();
-            const buf = await crypto.subtle.digest("SHA-256", encoder.encode(text));
+            const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
             return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join("");
         }
 
         function openAuth() {
-            clearInterval(countdownInterval);
+            pauseRedirect();
             const hasDigest = Boolean(localStorage.getItem(MASTER_HASH_STORAGE_KEY));
             isSettingInitialPass = !hasDigest;
 
-            document.getElementById("auth-sub").innerText = isSettingInitialPass
+            document.getElementById("auth-sub").textContent = isSettingInitialPass
                 ? "SET LOCAL PASSPHRASE (SHA-256)"
                 : "ENTER MASTER PASSPHRASE";
             document.getElementById("gate-confirm-wrap").style.display = isSettingInitialPass ? "block" : "none";
-            document.getElementById("btn-auth-submit").innerText = isSettingInitialPass ? "SAVE & OPEN" : "UNLOCK";
+            document.getElementById("btn-auth-submit").textContent = isSettingInitialPass ? "SAVE & OPEN" : "UNLOCK";
             document.getElementById("auth-error").style.display = "none";
             document.getElementById("gate-pass").value = "";
             document.getElementById("gate-pass-confirm").value = "";
@@ -1188,7 +1145,7 @@
 
         function showAuthError(msg) {
             const errEl = document.getElementById("auth-error");
-            errEl.innerText = msg;
+            errEl.textContent = msg;
             errEl.style.display = "block";
         }
 
